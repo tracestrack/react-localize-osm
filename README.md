@@ -1,1 +1,1 @@
-# openstreetmap-localizer
+# OpenStreetMap Localisation Tool
