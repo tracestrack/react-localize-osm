@@ -1,0 +1,13 @@
+.form-row.row-tags {
+    display: inline-flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+.form-row.row-tags .input-group {
+    flex: 1 1 auto;
+    width: unset;
+}
+.item-filters .dropdown-item {
+    display: flex;
+    justify-content: space-between;
+}

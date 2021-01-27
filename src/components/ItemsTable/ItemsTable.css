@@ -1,0 +1,33 @@
+
+th {
+    position: sticky;
+    top: 0px;
+    background: white;
+}
+
+td input {
+    max-width: 150px;
+}
+
+.items-loading {
+    position: absolute;
+    top: calc(50% - 21px);
+    left: calc(50% - 21px);
+    z-index: 2;
+}
+
+.items-loading-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255,255,255,.5);
+    z-index: 1;
+}
+
+.icon-btn {
+    cursor: pointer;
+    opacity: .7;
+}
+.icon-btn:hover { opacity: 1 }
