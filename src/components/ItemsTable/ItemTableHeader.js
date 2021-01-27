@@ -1,13 +1,16 @@
-function TableHeader({titles}) {
+
+export default function ItemTableHeader({languages, onClick}) {
+    const titles =  ["Name", ...languages.map(lang => `Name:${lang}`)];
     return (
         <tr>
-            {titles.map(title => (<th key={title}>{title}</th>))}
+        {titles.map(title => 
+            (<th 
+                style={{cursor: "pointer"}}
+                key={title}
+                onClick={() => onClick(title.toLowerCase())}
+            >{title}
+            </th>))
+        }
         </tr>
     );
-}
-
-export default function ItemTableHeader({languages}) {
-    return TableHeader({
-        titles: ["Name", ...languages.map(lang => `Name:${lang}`)]
-    });
 }
