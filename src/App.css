@@ -27,3 +27,19 @@
     min-height: 100px;
     padding-top: 0;
 }
+
+.card.card-items  .card-body.items-loading {
+    overflow-y: hidden;
+}
+
+.items-loading::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255,255,255,.5);
+    z-index: 2;
+}

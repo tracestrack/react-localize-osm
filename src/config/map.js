@@ -1,8 +1,22 @@
-const mapConfig = {
-   // tileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    tileUrl: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png",
-    addLang: true,
+/* eslint-disable */
+
+const OSMtiles = {
+    tileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",  
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+};
+
+// localized tiles 
+// note that new translations are applied after while
+const WikimediaTiles = {
+    tileUrl: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png",
+    attribution: `<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> | Map data © <a href="http://openstreetmap.org/copyright">OpenStreetMap contributors</a>`,
+    // this will tell Map component to add ?lang={lang} to tileUrl
+    // lang = first language you will choose in the interface
+    addLang: true
+};
+
+const mapConfig = {
+    ...OSMtiles,   
     maxZoom: 19
 };
 export default mapConfig;

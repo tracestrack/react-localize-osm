@@ -9,7 +9,6 @@ const compareTags = (i1, i2, field) =>
         (i1.tags[field]||"").localeCompare(i2.tags[field]||"");
  
 function ItemsTable({
-    loading, 
     languages, 
     handlers,
     items, 
@@ -49,12 +48,6 @@ function ItemsTable({
                     )}
                 </tbody>
             </Table>
-            {loading ? (
-            <Fragment>
-                <div className="items-loading-overlay" />
-            </Fragment>
-            ) 
-            : null}
         </Fragment>
     );
     

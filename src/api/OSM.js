@@ -120,8 +120,8 @@ export default class OSMApi {
     getUser() {
         return this.fetchJson("/user/details.json");            
     }
-    getElements({bbox, filters, languages}) {
-        return this.overpass.query({bbox, filters, languages});
+    getElements(opts) {
+        return this.overpass.query(opts);
     }
     updateElements(updates) {
         if(!this.currentChangeset) {

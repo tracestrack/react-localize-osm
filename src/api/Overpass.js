@@ -4,15 +4,20 @@ export default class Overpass {
     constructor(config = {}) {
         this.apiUrl = config.apiUrl || defaultApiUrl;
     }
-    query({bbox, filters, languages}) {
+    query({bbox, zoom, center, filters, languages}) {
         const baseEls = filters.tags.map(t => `nwr["${t}"]["name"]`);
-        const bboxStr = `(${bbox.join(",")})`;
+        const radius = 75000;
+        const area = zoom > 10 ?
+            `(${bbox.join(",")})`
+            : `(around:${radius},${center.join(",")})`;
+
+
         const elementsQuery = (filters.hideFilled ? 
             baseEls.map(base => 
-                languages.map(l => `${base}[!"name:${l}"]${bboxStr}`)
+                languages.map(l => `${base}[!"name:${l}"]${area}`)
                 .join(";\n")
             )
-            : baseEls.map(base => base + bboxStr))
+            : baseEls.map(base => base + area))
             .join(";\n");
 
         const outTypes = "qt body meta center"; //we need meta for "version" field 

@@ -208,6 +208,8 @@ class App extends Component {
             }
         });
         this.osmApi.getElements({
+            center: this.state.center,
+            zoom: this.state.zoom,
             bbox: this.bbox, 
             filters: this.state.filters,
             languages: this.state.user.languages
@@ -386,13 +388,18 @@ class App extends Component {
                                 hasItemsToUpdate={hasItemsToUpdate}
                                 updateItems={this.updateItems.bind(this)}
                             /> 
-                            <div className={this.state.serverMsg.error ? "text-danger" : "text-success"}>
+                            <div className={this.state.serverMsg.error ? 
+                                              "text-danger" 
+                                            : "text-success"}>
                                 {this.state.serverMsg.text}
                             </div> 
                         </Card.Header>
-                        <Card.Body>
+                        <Card.Body
+                            className={this.state.loading.items ? 
+                                      "items-loading" 
+                                      : ""}
+                        >
                             <ItemsTable 
-                                loading={this.state.loading.items}
                                 languages={this.state.user.languages||[]}
                                 items={this.state.items}
                                 focused={this.state.focusedItem}

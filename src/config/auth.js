@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 
 const mainServer = {
     oauth_consumer_key: "p2szywibtwHNFh1RZVNq21uCo9XBuUZvEwz0sYae",
@@ -7,7 +7,6 @@ const mainServer = {
 };
 
 // use this when testing new features to not spoil main osm database
-// eslint-disable-next-line
 const devServer = {
     oauth_consumer_key: '8CxsQfI9MFfsYm4nq8bBm6Htch3SiK9BFA8IQhHs',
     oauth_secret:       'SZka3I7w1Z41ePlQDauVwLLt6UIG4LLDbaWhNHkM',
