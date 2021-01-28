@@ -336,7 +336,7 @@ class App extends Component {
             // also don't load new items till updates are not done and synced
             items: this.state.zoom < 10 || this.state.loading.updates, 
             // nothing to update
-            updates: !!Object.keys(this.state.itemsToUpdate).length
+            updates: !Object.keys(this.state.itemsToUpdate).length
         };
         const touchedItems  = Object.keys(this.state.itemsToUpdate).map(s => +s);
         const mapHandlers = {
