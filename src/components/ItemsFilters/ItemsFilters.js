@@ -14,7 +14,7 @@ function ItemsFilters({
     languages,
     languagesList, 
     getItems, 
-    hasItemsToUpdate, 
+    disabled,
     loading,
     updateItems,  
     setLanguages
@@ -68,14 +68,14 @@ function ItemsFilters({
             <LoadingButton 
                 title="Get names"
                 size="lg"
-                disabled={loading.updates}
+                disabled={disabled.items}
                 onClick={getItems}
                 loading={loading.items}
             />
             <LoadingButton 
                 title="Update names"
                 size="lg"
-                disabled={!hasItemsToUpdate}
+                disabled={disabled.updates}
                 onClick={updateItems}
                 loading={loading.updates}
             />

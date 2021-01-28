@@ -273,7 +273,6 @@ class App extends Component {
         });
         this.osmApi.updateElements(this.state.itemsToUpdate)
         .then(diff => {
-            console.log(diff)
             this.updatesStorage.patchAndStore(
                 this.state.itemsToUpdate, diff
             );
@@ -332,7 +331,13 @@ class App extends Component {
         });
     }
     render() {
-        const hasItemsToUpdate = !!Object.keys(this.state.itemsToUpdate).length;
+        const btnsDisabled = {
+            // query for a large bbox is too slow and won't work
+            // also don't load new items till updates are not done and synced
+            items: this.state.zoom < 11 || this.state.loading.updates, 
+            // nothing to update
+            updates: !!Object.keys(this.state.itemsToUpdate).length
+        };
         const touchedItems  = Object.keys(this.state.itemsToUpdate).map(s => +s);
         const mapHandlers = {
             onLoad:      this.updateBbox.bind(this),
@@ -385,7 +390,7 @@ class App extends Component {
                                 setLanguages={this.setLanguages.bind(this)}
                                 items={this.state.items}
                                 getItems={this.getItems.bind(this)}
-                                hasItemsToUpdate={hasItemsToUpdate}
+                                disabled={btnsDisabled}
                                 updateItems={this.updateItems.bind(this)}
                             /> 
                             <div className={this.state.serverMsg.error ? 

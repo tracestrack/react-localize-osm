@@ -15,6 +15,6 @@ const devServer = {
 
 const authConfig = {   
     ...mainServer,
-    overpassApiUrl:     "https://overpass.kumi.systems/api/interpreter"
+    overpassApiUrl:     "https://overpass.openstreetmap.ru/api/interpreter"
 };
 export default authConfig;
