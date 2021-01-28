@@ -345,6 +345,9 @@ class App extends Component {
             onChange:    this.updateItem.bind(this),
             onIconClick: this.centerItem.bind(this)
         };
+        const lang = this.state.user.languages ? 
+            this.state.user.languages[0] 
+            : "en";
 
         return (            
             <Container className="App" fluid>
@@ -358,6 +361,7 @@ class App extends Component {
                     zoom={this.state.zoom}
                     center={this.state.center}
                     items={this.state.items}
+                    lang={lang}
                     touched={touchedItems}
                     focused={this.state.focusedItem}
                     watchFocus={this.state.watchFocus}

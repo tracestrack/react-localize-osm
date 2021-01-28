@@ -172,9 +172,7 @@ export default class OSMApi {
 	        //     <node|way|relation old_id="#" new_id="#" new_version="#"/>
             //  </diffResult>
             //
-            // old_id == new_id, because we apply only modify 
-
-          //  const diffRes = (new DOMParser()).parseFromString(diffResStr, "text/xml");
+            // old_id == new_id, because we apply only modify             
 
             return Object.fromEntries(
                 Array.from(diffRes.children[0].children)
@@ -183,6 +181,13 @@ export default class OSMApi {
                         version: +el.getAttribute("new_version")
                     }]));
         });
-        
+    }
+    closeChangeset() {
+        return this.fetch(`/changeset/${this.currentChangeset}/close`,{
+            method: "PUT",
+            headers: {
+                'Content-Type': "text/plain"
+            }   
+        })
     }
 }

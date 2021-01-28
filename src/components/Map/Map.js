@@ -12,9 +12,14 @@ export default function Map({
     zoom, 
     items, 
     touched,
+    lang = "en",
     focused, 
     handlers: {onMove, onLoad, onClickItem, onClickMap}
 }) {
+    let tileUrl = mapConfig.tileUrl;
+    if(mapConfig.addLang) {
+        tileUrl += "?lang=" + lang;
+    }
     return (
         <MapContainer 
             center={center} 
@@ -24,7 +29,7 @@ export default function Map({
         >
             <TileLayer
                 attribution={mapConfig.attribution}
-                url={mapConfig.tileUrl}
+                url={tileUrl}
                 maxZoom={mapConfig.maxZoom}
             />
             <MapView 
