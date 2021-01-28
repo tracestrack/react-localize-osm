@@ -17,6 +17,7 @@ const WikimediaTiles = {
 
 const mapConfig = {
     ...OSMtiles,   
+    minZoom: 3,
     maxZoom: 19
 };
 export default mapConfig;

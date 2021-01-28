@@ -7,7 +7,7 @@ export default class Overpass {
     query({bbox, zoom, center, filters, languages}) {
         const baseEls = filters.tags.map(t => `nwr["${t}"]["name"]`);
         const radius = 75000;
-        const area = zoom > 10 ?
+        const area = zoom > 1 ?
             `(${bbox.join(",")})`
             : `(around:${radius},${center.join(",")})`;
 

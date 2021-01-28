@@ -25,11 +25,13 @@ export default function Map({
             center={center} 
             zoom={zoom} 
             scrollWheelZoom={true} 
+            minZoom={mapConfig.minZoom}
             maxZoom={mapConfig.maxZoom}
         >
             <TileLayer
                 attribution={mapConfig.attribution}
                 url={tileUrl}
+                minZoom={mapConfig.minZoom}
                 maxZoom={mapConfig.maxZoom}
             />
             <MapView 

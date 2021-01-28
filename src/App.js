@@ -334,7 +334,7 @@ class App extends Component {
         const btnsDisabled = {
             // query for a large bbox is too slow and won't work
             // also don't load new items till updates are not done and synced
-            items: this.state.zoom < 11 || this.state.loading.updates, 
+            items: this.state.zoom < 10 || this.state.loading.updates, 
             // nothing to update
             updates: !!Object.keys(this.state.itemsToUpdate).length
         };
