@@ -35,7 +35,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        passphrase: ${{ secrets.PASSPHRASE }}
+        use_insecure_cipher: true
         source: "build"
         target: ${{ secrets.TARGET_PATH }}
         rm: true
