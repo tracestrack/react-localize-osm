@@ -27,7 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build --if-present
-    - name: Deploy
 
     - name: deploy
       uses: appleboy/scp-action@master
@@ -36,5 +35,5 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        source: "build"
+        source: "tests/a.txt,tests/b.txt"
         target: "test"
