@@ -14,7 +14,6 @@ import './App.css';
 
 import authConfig from "./config/auth";
 import {languagesList, tagsList} from "./config/interface";
-import history from "history/browser";
 
 const cookieKeys = {
     languages: "_osm-localization_languages",
@@ -68,7 +67,7 @@ class App extends Component {
     parseURLPath() {
         let zoom = 6;
         let center = [0, 0];
-        const hash = history.location.hash.replace("#/", "");
+        const hash = window.location.hash.replace("#/", "");
         if (hash) {
             const [z, lat, lng] = hash.split("/");
             zoom = +z;
@@ -83,7 +82,7 @@ class App extends Component {
             limit: 100,
             hideFilled: false
         };
-        const search = history.location.search.replace("?", "");
+        const search = window.location.search.replace("?", "");
         if(search) {
             const params = Object.fromEntries(
                 search.split("&")
@@ -121,9 +120,9 @@ class App extends Component {
         if(hideFilled)
             searchParts.push(`hide_filled=1`);
         const search = "?" + searchParts.join("&");
-        
-        history.push({search, hash});
 
+        let url = window.location.protocol + "//" + window.location.host + window.location.pathname + search + hash;
+        window.history.pushState({search, hash}, '', url);
     }
     componentDidMount() {
         if(this.osmApi.authenticated()) {
