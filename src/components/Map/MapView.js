@@ -9,7 +9,7 @@ export default function MapView({onLoad, onMove, onClick, center, zoom}) {
         map.flyTo(center, zoom);
         
     useMapEvents({
-        move: () => {
+        moveend: () => {
             let c = map.getCenter();
             onMove({
                 bbox: Object.values(map.getBounds()).map(toArray),

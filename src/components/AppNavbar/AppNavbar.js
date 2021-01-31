@@ -18,7 +18,7 @@ export default function AppNavbar({user, login, logout, loading}) {
                     alt="App logo"
                     className="mx-1 avatar"
                 />
-              OpenStreetMap Localization Tool      <span class="version">v{packageJson["version"]}</span>
+              OpenStreetMap Localization Tool      <span className="version">v{packageJson["version"]}</span>
             </Navbar.Brand>
         {user.loggedIn ? 
             <UserLoggedIn 

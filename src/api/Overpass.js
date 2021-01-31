@@ -1,5 +1,7 @@
 const defaultApiUrl = "https://overpass-api.de/api/interpreter";
 
+const constrain = coords => coords.map((c, i) => i % 2 ? (c+180) % 360 - 180 : c % 90);
+
 export default class Overpass {
     constructor(config = {}) {
         this.apiUrl = config.apiUrl || defaultApiUrl;
@@ -8,8 +10,8 @@ export default class Overpass {
         const baseEls = filters.tags.map(t => `nwr["${t}"]["name"]`);
         const radius = 75000;
         const area = zoom > 1 ?
-            `(${bbox.join(",")})`
-            : `(around:${radius},${center.join(",")})`;
+            `(${bbox.map(constrain).join(",")})`
+            : `(around:${radius},${constrain(center).join(",")})`;
 
 
         const elementsQuery = (filters.hideFilled ? 

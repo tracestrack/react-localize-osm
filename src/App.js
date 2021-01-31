@@ -106,7 +106,7 @@ class App extends Component {
         }
         return filters;        
     }
-    updateLocation() {
+    updateLocation(replace=false) {
         const {
             zoom, 
             center: [lat, lng], 
@@ -122,7 +122,11 @@ class App extends Component {
         const search = "?" + searchParts.join("&");
 
         let url = window.location.protocol + "//" + window.location.host + window.location.pathname + search + hash;
-        window.history.pushState({search, hash}, '', url);
+
+        if(replace)
+            window.history.replaceState({search, hash}, '', url);
+        else 
+            window.history.pushState({search, hash}, '', url);
     }
     componentDidMount() {
         if(this.osmApi.authenticated()) {
@@ -242,7 +246,7 @@ class App extends Component {
     updatePosition({bbox, center, zoom}) {
         this.setState(
             {center, zoom}, 
-            () => this.updateLocation());
+            () => this.updateLocation(true));
         this.bbox = bbox;
     }
     updateBbox({bbox}) {
@@ -355,6 +359,8 @@ class App extends Component {
             this.state.user.languages[0] 
             : "en";
 
+        const tags = tagsList.filter(t => this.state.filters.tags.indexOf(t.key) !== -1);
+
         return (            
             <Container className="App" fluid>
                 <AppNavbar
@@ -404,6 +410,7 @@ class App extends Component {
                                       : ""}
                         >
                             <ItemsTable 
+                                categories={tags}
                                 languages={this.state.user.languages||[]}
                                 items={this.state.items}
                                 focused={this.state.focusedItem}

@@ -1,7 +1,9 @@
 import {useRef, useEffect} from "react";
+import Badge from "react-bootstrap/Badge";
 
 export default function Item({
     item, 
+    category,
     languages, 
     focused,
     handlers: {onFocus, onBlur, onChange, onIconClick}
@@ -12,15 +14,24 @@ export default function Item({
             firstInput.current.focus();
         }
     }, [focused]);
+    
     return (
-        <tr key={item.id}>
+        <tr>
+            <td className="category">
+                <Badge variant="info">
+                    {category}
+                </Badge>
+                <Badge variant="light">
+                    {item.tags[category]}
+                </Badge>
+            </td>
             <td>
+                <span>{item.tags.name}</span>
                 <i 
                     className="fa fa-crosshairs icon-btn mt-1" 
-                    style={{float: "left"}} 
+                    style={{float: "right"}} 
                     onClick={() => onIconClick(item)}
                 />
-                <span>{item.tags.name}</span>
             </td>
             {languages.map((lang, i) => (
             <td key={lang}>
