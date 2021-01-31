@@ -13,7 +13,7 @@ const compareCategoryTag = (i1, i2) =>
         i1.category.localeCompare(i2.caterory) ||
         it.item.tags[i1.category].localeCompare(i2.item.tags[i2.category]);
 
-const compareTags = (i1, i2, field) => field == "category" ?
+const compareTags = (i1, i2, field) => field === "category" ?
         compareCategoryTag(i1, i2)
         : compareNames(i1.item, i2.item, field)
 
