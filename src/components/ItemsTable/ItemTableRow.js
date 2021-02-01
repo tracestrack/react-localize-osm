@@ -10,10 +10,11 @@ export default function Item({
 }) {
     const firstInput = useRef(null);
     useEffect(() => {
-        if (focused) {
+        if (focused && 
+            document.activeElement.id.indexOf(item.id+"") !== 0) {
             firstInput.current.focus();
         }
-    }, [focused]);
+    }, [focused, item]);
     
     return (
         <tr>
@@ -37,6 +38,7 @@ export default function Item({
             <td key={lang}>
                 <input
                     type="text"
+                    id={item.id + lang}
                     ref={i ? null : firstInput}
                     value={item.tags[`name:${lang}`]||""}    
                     onChange={e => onChange(item, lang, e.target.value)}

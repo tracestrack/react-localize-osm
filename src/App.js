@@ -318,9 +318,11 @@ class App extends Component {
                 center: itemCenter(item),
                 focusedItem: itemId
             });
-        } else this.setState({
-            focusedItem: itemId
-        });
+        } else {
+            this.setState({
+                focusedItem: itemId
+            });
+        }
     }
     blurItem() {
         this.setState({
