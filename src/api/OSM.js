@@ -123,6 +123,9 @@ export default class OSMApi {
     getElements(opts) {
         return this.overpass.query(opts);
     }
+    getTwins(el, tags) {
+        return this.overpass.getTwins(el, tags);
+    }
     updateElements(updates) {
         if(!this.currentChangeset) {
             return this.createChangeset()

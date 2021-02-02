@@ -25,7 +25,17 @@ const itemCenter = item => item.center ?
                           : [item.lat, item.lon];
 const itemMinZoom = 14;
 
-
+function uniq(items, tags) {
+    const un = {};
+    return items.filter(i => {
+        const k = i.tags.name + tags.map(t => t + i.tags[t] ).join("");
+        if(!un[k]) {
+            un[k] = 1; 
+            return true;
+        }
+        return false;
+    });
+}
 
 
 class App extends Component {
@@ -218,6 +228,10 @@ class App extends Component {
             languages: this.state.user.languages
         })
         .then(items => {
+            // filter out the items with the same name and selected category tags
+            // eg. there are could be multiple ways representing one street            
+
+            items = uniq(items, this.state.filters.tags);
             this.setState({
                 items: this.updatesStorage.sync(items, 
                                                 this.state.filters.hideFilled, 
@@ -253,11 +267,26 @@ class App extends Component {
         this.bbox = bbox; 
     }
     updateItem(item, lang, value) {
-        item.tags[`name:${lang}`] = value;
+        item.tags[`name:${lang}`] = value;        
+        if(!item.twins) {     
+            // get all the items with the same name and tags
+            item.twins = [];
+            this.osmApi.getTwins(item, this.state.filters.tags)
+            .then(twins => {
+                item.twins = twins;
+                item.twins.forEach(i => {
+                    i.tags[`name:${lang}`] = value;
+                });
+            });
+        } else {
+            item.twins.forEach(i => {
+                i.tags[`name:${lang}`] = value;
+            });
+        }
         this.setState({itemsToUpdate: {
             ...this.state.itemsToUpdate,
             [item.id]: item
-        }});
+        }}); 
     }
     setFilter(updates) {
         this.setState({
@@ -274,7 +303,16 @@ class App extends Component {
                 updates: true
             }
         });
-        this.osmApi.updateElements(this.state.itemsToUpdate)
+        let items = {};
+        Object.values(this.state.itemsToUpdate)
+            .forEach(i => {
+            let {twins, ...self} = i;
+            items[self.id] = self;
+            twins.forEach(t => {
+                items[t.id] = t;
+            });
+        });
+        this.osmApi.updateElements(items)
         .then(diff => {
             this.updatesStorage.patchAndStore(
                 this.state.itemsToUpdate, diff
