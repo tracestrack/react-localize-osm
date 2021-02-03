@@ -3,8 +3,6 @@ import Overpass from "./Overpass";
 
 // tag to identify changesets created by app
 const appTag = "OSM-Localization-Web";
-// comment tag in changeset
-const appComment = "Adding localized names";
 
 function json2xml(json) {
     return Object.entries(json)
@@ -36,12 +34,21 @@ function createChangeset() {
         osm: {
             changeset: [
                 {tag: {k: "created_by", v: appTag}},
-                {tag: {k: "comment",    v: appComment}}
+                {tag: {k: "comment",    v: ""}}
             ]
         }
     });
 }
-
+function createOsm(changeset) {
+    return json2xml({
+        osm: {
+            changeset: {
+                tags:  Object.entries(changeset.tags)
+                .map(([k, v]) => ({k, v}))            
+            }
+        }
+    });
+}
 
 function createOsmChange(updates, changesetId) {
     return json2xml({
@@ -126,6 +133,7 @@ export default class OSMApi {
     getTwins(el, tags) {
         return this.overpass.getTwins(el, tags);
     }
+
     updateElements(updates) {
         if(!this.currentChangeset) {
             return this.createChangeset()
@@ -143,6 +151,20 @@ export default class OSMApi {
     getChangesets() {
         return this.fetch("/changesets");
     }
+    getCurrentChangeset() {
+        return this.checkChangesetOpen()
+        .then(open => {
+            if(!open) {
+                return this.createChangeset()
+                .then(() => this._getCurrentChangeset());
+            }
+            return this._getCurrentChangeset();
+        })
+    }
+    _getCurrentChangeset() {
+        return this.fetchJson(`/changeset/${this.currentChangeset}.json`)
+        .then(res => res.elements[0]);
+    }
     createChangeset() {
         return this.fetch("/changeset/create", {
             method: "PUT",
@@ -158,6 +180,22 @@ export default class OSMApi {
         return this.fetchJson(`/changeset/${this.currentChangeset}.json`)
         .then(res => {
             return res.elements?.pop().open;
+        })
+    }
+    updateChangesetTags(changeset) {
+        return this.fetch(`/changeset/${this.currentChangeset}`, {
+            method: "PUT",
+            body: createOsm(changeset),
+            headers: {
+                'Content-Type': "text/plain"
+            }   
+        });
+    }
+    closeChangeset() {
+        return this.fetch(`/changeset/${this.currentChangeset}/close`, {
+            method: "PUT"
+        }).then(() => {
+            this.currentChangeset = false;
         })
     }
     updateChangeset(updates) {
@@ -185,12 +223,5 @@ export default class OSMApi {
                     }]));
         });
     }
-    closeChangeset() {
-        return this.fetch(`/changeset/${this.currentChangeset}/close`,{
-            method: "PUT",
-            headers: {
-                'Content-Type': "text/plain"
-            }   
-        })
-    }
+
 }

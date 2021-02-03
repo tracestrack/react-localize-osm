@@ -13,7 +13,9 @@ export default class Overpass {
         const query = 
             `[out:json][timeout:25];
             ${el.type}(${el.id});
-            nwr(around:500)${tagsStr}["name"="${el.tags.name}"];
+            complete(100) {
+                nwr(around:500)${tagsStr}["name"="${el.tags.name}"];
+            }
             out ${outTypes};`
 
         const data = new FormData();

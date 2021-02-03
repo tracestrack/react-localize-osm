@@ -6,6 +6,7 @@ import NotLoggedInGreeting from "./components/NotLoggedInGreeting";
 import ItemsFilters from "./components/ItemsFilters";
 import ItemsTable from "./components/ItemsTable";
 import AppNavbar from "./components/AppNavbar";
+import ChangesetSettings from "./components/ChangesetSettings";
 import OSMApi from "./api/OSM";
 import CookieManager from "./utils/CookieManager";
 import UpdatesStorage from "./utils/UpdatesStorage";
@@ -71,7 +72,9 @@ class App extends Component {
             serverMsg: {
                 error: false,
                 text: ""
-            }
+            },
+            changeset: null,
+            lastReqTags: []
         };
     }
     parseURLPath() {
@@ -115,6 +118,31 @@ class App extends Component {
             }
         }
         return filters;        
+    }
+    loadChangeset() {
+        if(this.osmApi.currentChangeset) {
+            this.osmApi.getCurrentChangeset()
+            .then(changeset => {
+                console.log(changeset)
+                this.setState({changeset});
+            })
+        }
+    }
+    updateChangeset({comment}) {
+        this.setState({
+            changeset: {
+                ...this.state.changeset,
+                tags: {
+                    ...this.state.changeset.tags,
+                    comment
+                }
+            }
+        }, () => this.osmApi.updateChangesetTags(this.state.changeset));        
+    }
+    closeChangeset() {
+        this.osmApi.closeChangeset().then(() => {
+            this.setState({changeset: null});
+        })
     }
     updateLocation(replace=false) {
         const {
@@ -203,6 +231,7 @@ class App extends Component {
                 }
             });
             this.storeLanguages(languages);
+            this.loadChangeset();
         });           
     }
     logout() {
@@ -240,7 +269,8 @@ class App extends Component {
                 loading: {
                     ...this.state.loading,
                     items: false
-                }
+                },
+                lastReqTags: this.state.filters.tags.slice()
             });
         })
         .catch(err => {
@@ -317,7 +347,6 @@ class App extends Component {
             this.updatesStorage.patchAndStore(
                 this.state.itemsToUpdate, diff
             );
-
             this.cookieManager.write({
                 [cookieKeys.changeset]: this.osmApi.currentChangeset
             });
@@ -334,6 +363,7 @@ class App extends Component {
                     updates: false
                 }
             });
+            this.loadChangeset();
         })
         .catch(err => {
             this.setServerMsg({
@@ -395,12 +425,16 @@ class App extends Component {
             onChange:    this.updateItem.bind(this),
             onIconClick: this.centerItem.bind(this)
         };
+        const changesetHandlers = {
+            onUpdate:   this.updateChangeset.bind(this),
+            onClose:    this.closeChangeset.bind(this)
+        };
+
         const lang = this.state.user.languages ? 
             this.state.user.languages[0] 
             : "en";
 
-        const tags = tagsList.filter(t => this.state.filters.tags.indexOf(t.key) !== -1);
-
+        const tags = this.state.lastReqTags;
         return (            
             <Container className="App" fluid>
                 <AppNavbar
@@ -463,6 +497,10 @@ class App extends Component {
                             <NotLoggedInGreeting />
                         </Card.Body>
                 }</Card>               
+                <ChangesetSettings 
+                    changeset={this.state.changeset} 
+                    handlers={changesetHandlers}
+                />
             </Container>
         );
     }

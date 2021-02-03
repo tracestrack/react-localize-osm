@@ -15,6 +15,7 @@ const devServer = {
 
 const authConfig = {   
     ...mainServer,
-    overpassApiUrl:     "https://overpass.kumi.systems/api/interpreter"
+    //overpassApiUrl:     "https://overpass.kumi.systems/api/interpreter"
+    overpassApiUrl: "https://overpass.nchc.org.tw/api/interpreter"
 };
 export default authConfig;

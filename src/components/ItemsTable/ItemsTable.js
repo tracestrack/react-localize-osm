@@ -49,7 +49,7 @@ function ItemsTable({
                     .filter(i => i.tags.name)
                     .map(item => ({
                         item,
-                        category: categories.find(t => !!item.tags[t.key]).key
+                        category: categories.find(t => !!item.tags[t])
                     }))
                     .sort((i1, i2) => sortOrder * compareTags(i1, i2, sortField))
                     .map(({item, category}) => (
