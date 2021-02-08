@@ -2,7 +2,7 @@ import osmAuth from "osm-auth";
 import Overpass from "./Overpass";
 
 // tag to identify changesets created by app
-const appTag = "OSM-Localization-Web";
+const appTag = "OSM Localization Tool (OsmLT): https://localize.osm.tracestrack.com";
 
 function json2xml(json) {
     return Object.entries(json)
