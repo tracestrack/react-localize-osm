@@ -3,7 +3,7 @@ import LoadingButton from "../common/LoadingButton";
 export default function UserLoggedOut({login, loading}) {
     return (
         <LoadingButton 
-            title="login"
+            title="Login"
             loading={loading}
             onClick={login}
         />
