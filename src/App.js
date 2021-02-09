@@ -21,23 +21,10 @@ const cookieKeys = {
     changeset: "_osm-locatization_changeset"
 };
 
-const itemCenter = item => item.center ? 
-                            [item.center.lat, item.center.lon] 
+const itemCenter = item => item.center ?
+                            [item.center.lat, item.center.lon]
                           : [item.lat, item.lon];
 const itemMinZoom = 14;
-
-function uniq(items, tags) {
-    const un = {};
-    return items.filter(i => {
-        const k = i.tags.name + tags.map(t => t + i.tags[t] ).join("");
-        if(!un[k]) {
-            un[k] = 1; 
-            return true;
-        }
-        return false;
-    });
-}
-
 
 class App extends Component {
     constructor(props) {
@@ -46,12 +33,12 @@ class App extends Component {
         this.osmApi = new OSMApi({
             ...authConfig,
             changeset: this.cookieManager.get(cookieKeys.changeset)
-        }); 
+        });
         this.updatesStorage = new UpdatesStorage();
         this.updatesStorage.load();
         const {zoom, center} = this.parseURLPath();
         const filters = this.parseURLQuery();
-        
+
         this.bbox = [];
         this.state = {
             user: {
@@ -85,7 +72,7 @@ class App extends Component {
             const [z, lat, lng] = hash.split("/");
             zoom = +z;
             center = [+lat, +lng];
-        } 
+        }
 
         return {zoom, center};
     }
@@ -93,7 +80,18 @@ class App extends Component {
         const filters = {
             tags: ["place"],
             limit: 100,
-            hideFilled: false
+            hideFilled: false,
+            search: {
+                q: "",
+                street:  "",
+                city: "",
+                county: "",
+                state: "",
+                country: "",
+                postalcode: ""
+            },
+            searchMode: "simple",
+            mode: "tags"
         };
         const search = window.location.search.replace("?", "");
         if(search) {
@@ -101,23 +99,38 @@ class App extends Component {
                 search.split("&")
                 .map(e => e.split("="))
             );
-            if(params.tags) {               
+            if(params.tags) {
                 const cleanedTags = params.tags.split(",")
                     .filter(t => tagsList.find(t1 => t1.key === t));
                 if(cleanedTags.length)
                     filters.tags = cleanedTags;
             }
+            if(params.search) {
+                try {
+                    const searchParams = JSON.parse(decodeURI(params.search));
+                    for(let k in filters.search) {
+                        filters.search[k] = searchParams[k] || filters.search[k];
+                        if(k !== "q" && !!searchParams[k])
+                            filters.searchMode = "structured";
+                    }
+                    if(!params.tags) {
+                        filters.mode = "search";
+                    }
+                } catch (e) {
+
+                }
+            }
             if(params.limit) {
                 const n = parseInt(params.limit);
-                if(!isNaN(n)) 
+                if(!isNaN(n))
                     filters.limit = n;
             }
             if(params.hide_filled) {
-                filters.hideFilled = params.hide_filled && 
+                filters.hideFilled = params.hide_filled &&
                                     +params.hide_filled !== 0;
             }
         }
-        return filters;        
+        return filters;
     }
     loadChangeset() {
         if(this.osmApi.currentChangeset) {
@@ -137,7 +150,7 @@ class App extends Component {
                     comment
                 }
             }
-        }, () => this.osmApi.updateChangesetTags(this.state.changeset));        
+        }, () => this.osmApi.updateChangesetTags(this.state.changeset));
     }
     closeChangeset() {
         this.osmApi.closeChangeset().then(() => {
@@ -146,29 +159,41 @@ class App extends Component {
     }
     updateLocation(replace=false) {
         const {
-            zoom, 
-            center: [lat, lng], 
-            filters: {tags, limit, hideFilled}
+            zoom,
+            center: [lat, lng],
+            filters: {tags, limit, hideFilled, search, mode, searchMode}
         } = this.state;
 
         const hash = ["/#", zoom, lat.toFixed(4), lng.toFixed(4)].join("/");
-        const searchParts = [`tags=${tags.join(",")}`];        
-        if(limit) 
-            searchParts.push(`limit=${limit}`);
-        if(hideFilled)
-            searchParts.push(`hide_filled=1`);
-        const search = "?" + searchParts.join("&");
+        const searchParts = [];
+        if(mode === "search") {
+            const {q, ...structured} = search;
+            const searchObj = (searchMode === "simple") ?
+                               {q}
+                              : structured;
 
-        let url = window.location.protocol + "//" + window.location.host + window.location.pathname + search + hash;
+            searchParts.push(`search=${JSON.stringify(searchObj)}`);
+        }
+        else {
+            searchParts.push(`tags=${tags.join(",")}`);
+            if(hideFilled)
+                searchParts.push(`hide_filled=1`);
+        }
+        if(limit)
+            searchParts.push(`limit=${limit}`);
+
+        const searchQ = "?" + searchParts.join("&");
+
+        let url = window.location.protocol + "//" + window.location.host + window.location.pathname + searchQ + hash;
 
         if(replace)
-            window.history.replaceState({search, hash}, '', url);
-        else 
-            window.history.pushState({search, hash}, '', url);
+            window.history.replaceState({searchQ, hash}, '', url);
+        else
+            window.history.pushState({searchQ, hash}, '', url);
     }
     componentDidMount() {
         if(this.osmApi.authenticated()) {
-            this.getUser(); 
+            this.getUser();
         }
     }
     setServerMsg(serverMsg) {
@@ -179,7 +204,7 @@ class App extends Component {
                 error: false,
                 text: ""
             }});
-        } 
+        }
         document.addEventListener("click", fn);
     }
     login() {
@@ -216,7 +241,7 @@ class App extends Component {
         this.osmApi.getUser()
         .then(res => {
             let languages = this.getLanguages() ||
-                            res.user.languages.filter(l => 
+                            res.user.languages.filter(l =>
                                 languagesList.find(({key}) => key === l)
                             );
             this.setState({
@@ -232,7 +257,7 @@ class App extends Component {
             });
             this.storeLanguages(languages);
             this.loadChangeset();
-        });           
+        });
     }
     logout() {
         this.osmApi.logout();
@@ -252,25 +277,23 @@ class App extends Component {
         this.osmApi.getElements({
             center: this.state.center,
             zoom: this.state.zoom,
-            bbox: this.bbox, 
+            bbox: this.bbox,
             filters: this.state.filters,
             languages: this.state.user.languages
         })
         .then(items => {
-            // filter out the items with the same name and selected category tags
-            // eg. there are could be multiple ways representing one street            
-
-            items = uniq(items, this.state.filters.tags);
             this.setState({
-                items: this.updatesStorage.sync(items, 
-                                                this.state.filters.hideFilled, 
-                                                this.state.user.languages), 
+                items: this.updatesStorage.sync(items,
+                                                this.state.filters.hideFilled,
+                                                this.state.user.languages),
                 itemsToUpdate: {},
                 loading: {
                     ...this.state.loading,
                     items: false
                 },
-                lastReqTags: this.state.filters.tags.slice()
+                lastReqTags: this.state.filters.mode === "search" ?
+                                  tagsList.map(t => t.key)
+                                : this.state.filters.tags.slice()
             });
         })
         .catch(err => {
@@ -289,16 +312,16 @@ class App extends Component {
     }
     updatePosition({bbox, center, zoom}) {
         this.setState(
-            {center, zoom}, 
+            {center, zoom},
             () => this.updateLocation(true));
         this.bbox = bbox;
     }
     updateBbox({bbox}) {
-        this.bbox = bbox; 
+        this.bbox = bbox;
     }
     updateItem(item, lang, value) {
-        item.tags[`name:${lang}`] = value;        
-        if(!item.twins) {     
+        item.tags[`name:${lang}`] = value;
+        if(!item.twins) {
             // get all the items with the same name and tags
             item.twins = [];
             this.osmApi.getTwins(item, this.state.filters.tags)
@@ -316,7 +339,7 @@ class App extends Component {
         this.setState({itemsToUpdate: {
             ...this.state.itemsToUpdate,
             [item.id]: item
-        }}); 
+        }});
     }
     setFilter(updates) {
         this.setState({
@@ -407,7 +430,14 @@ class App extends Component {
         const btnsDisabled = {
             // query for a large bbox is too slow and won't work
             // also don't load new items till updates are not done and synced
-            items: this.state.zoom < 10 || this.state.loading.updates, 
+            items: this.state.loading.updates ||
+                (this.state.filters.mode === "tags" ?
+                    this.state.zoom < 10
+                    :  !(this.state.filters.searchMode === "simple" ?
+                            this.state.filters.search.q
+                            : Object.entries(this.state.filters.search)
+                                .find(([k,v]) => k !== "q" && !!v)
+                )),
             // nothing to update
             updates: !Object.keys(this.state.itemsToUpdate).length
         };
@@ -430,12 +460,12 @@ class App extends Component {
             onClose:    this.closeChangeset.bind(this)
         };
 
-        const lang = this.state.user.languages ? 
-            this.state.user.languages[0] 
+        const lang = this.state.user.languages ?
+            this.state.user.languages[0]
             : "en";
 
-        const tags = this.state.lastReqTags;
-        return (            
+        const tags = tagsList.map(t => t.key);
+        return (
             <Container className="App" fluid>
                 <AppNavbar
                     login={this.login.bind(this)}
@@ -443,7 +473,7 @@ class App extends Component {
                     user={this.state.user}
                     loading={this.state.loading.auth}
                 />
-                <Map 
+                <Map
                     zoom={this.state.zoom}
                     center={this.state.center}
                     items={this.state.items}
@@ -453,13 +483,13 @@ class App extends Component {
                     watchFocus={this.state.watchFocus}
                     handlers={mapHandlers}
                 />
-                <Card 
+                <Card
                     className="card-items card p-1"
                 >{
-                this.state.user.loggedIn ? 
+                this.state.user.loggedIn ?
                     <Fragment>
                         <Card.Header>
-                            <ItemsFilters 
+                            <ItemsFilters
                                 filters={this.state.filters}
                                 setFilter={this.setFilter.bind(this)}
                                 tagsList={tagsList}
@@ -471,34 +501,34 @@ class App extends Component {
                                 getItems={this.getItems.bind(this)}
                                 disabled={btnsDisabled}
                                 updateItems={this.updateItems.bind(this)}
-                            /> 
-                            <div className={this.state.serverMsg.error ? 
-                                              "text-danger" 
+                            />
+                            <div className={this.state.serverMsg.error ?
+                                              "text-danger"
                                             : "text-success"}>
                                 {this.state.serverMsg.text}
-                            </div> 
+                            </div>
                         </Card.Header>
                         <Card.Body
-                            className={this.state.loading.items ? 
-                                      "items-loading" 
+                            className={this.state.loading.items ?
+                                      "items-loading"
                                       : ""}
                         >
-                            <ItemsTable 
+                            <ItemsTable
                                 categories={tags}
                                 languages={this.state.user.languages||[]}
                                 items={this.state.items}
                                 focused={this.state.focusedItem}
                                 handlers={itemHandlers}
-                            /> 
-                        
+                            />
+
                         </Card.Body>
                     </Fragment>
                     :  <Card.Body className="d-flex align-items-center justify-content-center">
                             <NotLoggedInGreeting />
                         </Card.Body>
-                }</Card>               
-                <ChangesetSettings 
-                    changeset={this.state.changeset} 
+                }</Card>
+                <ChangesetSettings
+                    changeset={this.state.changeset}
                     handlers={changesetHandlers}
                 />
             </Container>

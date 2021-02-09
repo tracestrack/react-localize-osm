@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/Button";
-import ChangesetBox from "./ChanesetBox";
+import ChangesetBox from "./ChangesetBox";
 import "./ChangesetSettings.css";
 import {useState, useEffect} from "react";
 
@@ -9,7 +9,7 @@ export default function ChangesetSettings({changeset, handlers}) {
 
     useEffect(() => {
         if(!changeset)
-            setVisible(0);
+            setVisible(false);
     }, [changeset]);
 
     return (
@@ -17,6 +17,7 @@ export default function ChangesetSettings({changeset, handlers}) {
             <Button 
                 id="changeset-button"
                 onClick={() => setVisible(!visible)}
+                disabled={!changeset}
             >{
                 changeset ? 
                 `Active changeset: ${changeset.id}`
