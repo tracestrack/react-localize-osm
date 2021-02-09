@@ -12,8 +12,8 @@
     position: absolute;
     left: 0px;
     top: 60px;
+    max-height: calc(100% - 60px);
     z-index: 10000;
-    max-height: 80vh;
     max-width: 30%;
 }
 
