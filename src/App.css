@@ -14,7 +14,7 @@
     top: 60px;
     max-height: calc(100% - 60px);
     z-index: 10000;
-    max-width: 30%;
+    width: 40%;
 }
 
 .card.card-items .card-header {
@@ -45,6 +45,6 @@
 }
 
 .leaflet-container {
-    width: 70%;
-    right: -30%;
+    width: 60%;
+    right: -40%;
 }
