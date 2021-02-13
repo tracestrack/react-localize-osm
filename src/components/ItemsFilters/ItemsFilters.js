@@ -45,7 +45,7 @@ function ItemsFilters({
             <Tab eventKey="tags" title="Tags">
               <Row className="form-row row-tags">
                 <CheckboxDropdownGroup
-                  title="Select Tags"
+                  title="Tags"
                   itemsList={tagsList}
                   selected={filters.tags}
                   onChange={tags => setFilter({tags})}
@@ -64,18 +64,6 @@ function ItemsFilters({
             </Tab>
         </Tabs>
         <Row className="d-flex align-items-center">
-          <Col>
-                <Form.Text className="form-text text-left">
-                    Limit
-                </Form.Text>
-                <Form.Control
-                    label="Limit"
-                    as="input"
-                    type="number"
-                    value={filters.limit}
-                    onChange={e => setFilter({limit: e.target.value})}
-                />
-          </Col>
           <Col>
                 <Form.Check 
                     type="checkbox"

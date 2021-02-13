@@ -16,11 +16,12 @@ export default class NominatimAPI {
         const params = [
             ...searchQuery,
             "limit=" + Math.min(filters.limit, apiElemLimit),
-            "viewbox=" + bbox.map(c => c.reverse().join(",")).join(","),
+          //"viewbox=" + bbox.map(c => c.reverse().join(",")).join(","),
             "format=json",
             "bounded=1",
             "dedupe=1"
         ];
+
         if(excludeIds.length) {
             params.push("exclude_place_ids=" + excludeIds.join(","));
         }

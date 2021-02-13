@@ -174,8 +174,9 @@ export default class OSMApi {
                     return [];
 
                 if(limit && elemsNom.length &&
-                    collected.length < limit) {
-                    return this.nominatimIncSearch(opts, collected);
+                   collected.length < limit) {
+                  // to keep it simple, we don't need to support limit
+                  //return this.nominatimIncSearch(opts, collected);
                 }
                 return this.overpass.getById(
                     collected.map(el => [el.osm_type, el.osm_id])
