@@ -1,5 +1,6 @@
 import osmAuth from "osm-auth";
 import Overpass from "./Overpass";
+import Nominatim from "./Nominatim";
 
 // tag to identify changesets created by app
 const appTag = "OSM Localization Tool (OsmLT): https://localize.osm.tracestrack.com";
@@ -22,7 +23,7 @@ function json2xml(json) {
             }
         });
         const attrsStr = attrs.map(([k1, v1]) => `${k1}="${v1}"`).join(" ");
-        return children ? 
+        return children ?
         `<${k} ${attrsStr}>${children}</${k}>`
         : `<${k} ${attrsStr}/>`;
     })
@@ -44,7 +45,7 @@ function createOsm(changeset) {
         osm: {
             changeset: {
                 tags:  Object.entries(changeset.tags)
-                .map(([k, v]) => ({k, v}))            
+                .map(([k, v]) => ({k, v}))
             }
         }
     });
@@ -67,11 +68,24 @@ function createOsmChange(updates, changesetId) {
                             // relation
                             ...(members ? {members} : {})
                         }
-                    }))               
+                    }))
         }
     });
 }
 
+const constrain = coords => coords.map((c, i) => i % 2 ? (c+180) % 360 - 180 : c % 90);
+
+function uniq(items, tags) {
+    const un = {};
+    return items.filter(i => {
+        const k = i.tags.name + tags.map(t => t + i.tags[t] ).join("");
+        if(!un[k]) {
+            un[k] = 1;
+            return true;
+        }
+        return false;
+    });
+}
 
 export default class OSMApi {
     constructor(config) {
@@ -82,14 +96,15 @@ export default class OSMApi {
         this.overpass = new Overpass({
             apiUrl: config.overpassApiUrl
         });
+        this.nominatim = new Nominatim();
         this.apiRoute = "/api/0.6";
         this.currentChangeset = config.changeset || false;
     }
     fetch(route, options = {}) {
         // wrapper for osm-auth and underlying ohauth to provide
-        // more fetch-alike interface        
+        // more fetch-alike interface
         const {method, body, headers = {}, ...opts} = options;
-        return new Promise((resolve, reject) => 
+        return new Promise((resolve, reject) =>
             this.auth.xhr({
                 method: method || 'GET',
                 path: this.apiRoute + route,
@@ -103,9 +118,9 @@ export default class OSMApi {
                     resolve(res);
                 } else {
                     reject(err);
-                }                
+                }
             })
-        );    
+        );
     }
     fetchJson(route, options) {
         return this.fetch(route, options)
@@ -115,7 +130,7 @@ export default class OSMApi {
         return this.auth.authenticated();
     }
     login() {
-        return new Promise(resolve => 
+        return new Promise(resolve =>
             this.auth.authenticate(res => {
                 resolve(res);
             })
@@ -125,10 +140,55 @@ export default class OSMApi {
         this.auth.logout();
     }
     getUser() {
-        return this.fetchJson("/user/details.json");            
+        return this.fetchJson("/user/details.json");
     }
     getElements(opts) {
-        return this.overpass.query(opts);
+        opts = {
+            ...opts,
+            bbox: opts.bbox.map(constrain)
+        };
+        if(opts.filters.mode === "search") {
+            return this.nominatimIncSearch(opts);
+        }
+        return this.overpass.query(opts)
+        .then(items => {
+            // filter out the items with the same name and selected category tags
+            // eg. there are could be multiple ways representing one street
+
+            items = uniq(items, opts.filters.tags);
+            return items;
+        });
+    }
+    nominatimIncSearch(opts, collected = []) {
+        // Limit of results in Nominatim is just 50
+        // to load more, we need to repeat the request to its API
+        // with query param "exclude_place_ids" to exclude already loaded.
+        // Nominatim objects are places, but we need nodes, ways and relations,
+        // so it neccessary to get them from Overpass then.
+        const limit = opts.filters.limit;
+        const exclude = collected.map(el => el.place_id);
+        return this.nominatim.query(opts, exclude)
+            .then(elemsNom => {
+                collected = [...elemsNom, ...collected];
+                if(!collected.length)
+                    return [];
+
+                if(limit && elemsNom.length &&
+                    collected.length < limit) {
+                    return this.nominatimIncSearch(opts, collected);
+                }
+                return this.overpass.getById(
+                    collected.map(el => [el.osm_type, el.osm_id])
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+                if(collected.length) {
+                    return this.overpass.getById(
+                        collected.map(el => [el.osm_type, el.osm_id])
+                    );
+                }
+            });
     }
     getTwins(el, tags) {
         return this.overpass.getTwins(el, tags);
@@ -171,10 +231,10 @@ export default class OSMApi {
             body: createChangeset(),
             headers: {
                 'Content-Type': "text/plain"
-            }       
+            }
         }).then(createdId => {
             this.currentChangeset = createdId;
-        });        
+        });
     }
     checkChangesetOpen() {
         return this.fetchJson(`/changeset/${this.currentChangeset}.json`)
@@ -188,7 +248,7 @@ export default class OSMApi {
             body: createOsm(changeset),
             headers: {
                 'Content-Type': "text/plain"
-            }   
+            }
         });
     }
     closeChangeset() {
@@ -204,7 +264,7 @@ export default class OSMApi {
             body: createOsmChange(updates, this.currentChangeset),
             headers: {
                 'Content-Type': "text/plain"
-            }   
+            }
         })
         .then(diffRes => {
             // the format of responce is xml document like:
@@ -213,7 +273,7 @@ export default class OSMApi {
 	        //     <node|way|relation old_id="#" new_id="#" new_version="#"/>
             //  </diffResult>
             //
-            // old_id == new_id, because we apply only modify             
+            // old_id == new_id, because we apply only modify
 
             return Object.fromEntries(
                 Array.from(diffRes.children[0].children)

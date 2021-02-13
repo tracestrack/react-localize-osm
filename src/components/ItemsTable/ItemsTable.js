@@ -6,7 +6,7 @@ import ItemTableRow from "./ItemTableRow"
 import "./ItemsTable.css";
 
 
-const compareNames = (i1, i2, field) => 
+const compareNames = (i1, i2, field) =>
         (i1.tags[field]||"").localeCompare(i2.tags[field]||"");
 
 const compareCategoryTag = (i1, i2) =>
@@ -17,11 +17,11 @@ const compareTags = (i1, i2, field) => field === "category" ?
         compareCategoryTag(i1, i2)
         : compareNames(i1.item, i2.item, field)
 
- 
+
 function ItemsTable({
-    languages, 
+    languages,
     handlers,
-    items, 
+    items,
     focused,
     categories
 }) {
@@ -30,17 +30,17 @@ function ItemsTable({
 
     const setSort = field => {
         if(field === sortField)
-            setOrder(-sortOrder);            
+            setOrder(-sortOrder);
         else
             setField(field);
     };
-    
+
     return (
         <Fragment>
             <Table size="sm">
                 <thead>
-                    <ItemTableHeader 
-                        languages={languages} 
+                    <ItemTableHeader
+                        languages={languages}
                         onClick={setSort}
                     />
                 </thead>
@@ -55,7 +55,7 @@ function ItemsTable({
                     .map(({item, category}) => (
                     <ItemTableRow
                         category={category}
-                        languages={languages} 
+                        languages={languages}
                         key={item.id}
                         item={item}
                         focused={focused === item.id}
@@ -66,7 +66,7 @@ function ItemsTable({
             </Table>
         </Fragment>
     );
-    
+
 }
 
 export default ItemsTable;
