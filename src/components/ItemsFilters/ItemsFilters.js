@@ -21,21 +21,25 @@ function ItemsFilters({
 }) {
     return (
     <Form className="item-filters">
-        <Row>
-            <Form.Text>
-                Categories
-            </Form.Text>
-        </Row>
-        <Row className="form-row row-tags">
-            <CheckboxGroup 
-                itemsList={tagsList}
-                selected={filters.tags}
-                onChange={tags => setFilter({tags})}
-                min={1}
-            />
+      <Row className="form-row row-tags">
+        <CheckboxDropdownGroup
+          title="Tags"
+          itemsList={tagsList}
+          selected={filters.tags}
+          onChange={tags => setFilter({tags})}
+          min={1}
+        />
+
+        <CheckboxDropdownGroup 
+          title="Languages"
+          itemsList={languagesList}
+          selected={languages}
+          onChange={setLanguages}
+          min={1}
+        />
         </Row>
         <Row className="d-flex align-items-center">
-            <Col>
+          <Col>
                 <Form.Text className="form-text text-left">
                     Limit
                 </Form.Text>
@@ -46,6 +50,8 @@ function ItemsFilters({
                     value={filters.limit}
                     onChange={e => setFilter({limit: e.target.value})}
                 />
+          </Col>
+          <Col>
                 <Form.Check 
                     type="checkbox"
                     className="mr-auto text-left"
@@ -53,28 +59,19 @@ function ItemsFilters({
                     label="Hide filled"
                     onChange={e => setFilter({hideFilled: e.target.checked})}
                 />
-            </Col>
-            <Col>
-                <CheckboxDropdownGroup 
-                    title="Languages"
-                    itemsList={languagesList}
-                    selected={languages}
-                    onChange={setLanguages}
-                    min={1}
-                />    
-            </Col>          
+          </Col>
         </Row>
         <Row className="d-flex justify-content-end">
             <LoadingButton 
                 title="Get names"
-                size="lg"
+                variant="primary"
                 disabled={disabled.items}
                 onClick={getItems}
                 loading={loading.items}
             />
             <LoadingButton 
                 title="Update names"
-                size="lg"
+                variant="success"
                 disabled={disabled.updates}
                 onClick={updateItems}
                 loading={loading.updates}

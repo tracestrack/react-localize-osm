@@ -21,7 +21,7 @@ export default function Item({
             <td className="category">
                 <Badge variant="info">
                     {category}
-                </Badge>
+                </Badge><br />
                 <Badge variant="light">
                     {item.tags[category]}
                 </Badge>
