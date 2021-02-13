@@ -1,7 +1,6 @@
 
 import Form from 'react-bootstrap/Form';
 import Row from "react-bootstrap/Row";
-import CheckboxGroup from "./CheckboxGroup";
 import CheckboxDropdownGroup from "./CheckboxDropdownGroup";
 import LoadingButton from "../common/LoadingButton";
 import AddressSearchForm from "./AddressSearchForm";
