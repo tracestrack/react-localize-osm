@@ -38,7 +38,14 @@ export default class Overpass {
             .catch(err => reject(err));
         })
     }
+  /*
     getTwins(el, tags) {
+
+      var condition = filters.tags;
+      if (condition.indexOf("=") > -1) {
+        condition = condition.replace("=", '"="');
+      }
+
         const tagsStr = tags.filter(t => el.tags[t])
                             .map(t => `["${t}"="${el.tags[t]}"]`);
         const query =
@@ -50,9 +57,15 @@ export default class Overpass {
             out ${outTypes};`
 
         return this.request(query);
-    }
+    }*/
     query({bbox, zoom, center, filters, languages}) {
-        const baseEls = filters.tags.map(t => `nwr["${t}"]["name"]`);
+
+      var condition = filters.tags;
+      if (condition.indexOf("=") > -1) {
+        condition = condition.replace("=", '"="');
+      }
+
+        const baseEls = [`nwr["${condition}"]["name"]`];
         const elementsQuery = filters.hideFilled ?
             baseEls.map(base =>
                 languages.map(l => `${base}[!"name:${l}"]`)

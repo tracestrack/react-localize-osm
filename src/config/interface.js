@@ -5,6 +5,8 @@ const languagesList = [
     { key: "fr", title: "Français"},
     { key: "ja", title: "日本語" },
     { key: "ru", title: "Русский" },
+    { key: "zh-Hans", title: "简体中文" },
+    { key: "zh-Hant", title: "繁体中文" },
     { key: "zh", title: "中文" }
 ];
 

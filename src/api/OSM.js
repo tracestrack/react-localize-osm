@@ -155,7 +155,7 @@ export default class OSMApi {
             // filter out the items with the same name and selected category tags
             // eg. there are could be multiple ways representing one street
 
-            items = uniq(items, opts.filters.tags);
+            //items = uniq(items, opts.filters.tags);
             return items;
         });
     }

@@ -13,12 +13,7 @@ export default function AppNavbar({user, login, logout, loading}) {
             bg="white"
         >
             <Navbar.Brand className="mr-auto">
-                <img 
-                    src={logo}
-                    alt="App logo"
-                    className="mx-1 avatar"
-                />
-              OpenStreetMap Localization Tool      <span className="version">v{packageJson["version"]}</span>
+              LOSM    <span className="version">v{packageJson["version"]} by Tracestrack</span>
             </Navbar.Brand>
         {user.loggedIn ? 
             <UserLoggedIn 

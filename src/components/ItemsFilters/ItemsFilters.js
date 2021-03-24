@@ -23,6 +23,8 @@ function ItemsFilters({
     setLanguages
 }) {
 
+  console.log(filters.tags[0]);
+
     return (
     <Form className="item-filters">
 
@@ -34,7 +36,6 @@ function ItemsFilters({
         min={1}
       />
 
-
         <Tabs
             defaultActiveKey="tags"
             activeKey={filters.mode}
@@ -42,16 +43,10 @@ function ItemsFilters({
             transition={false}
         >
             <Tab eventKey="tags" title="Tags">
-              <Row className="form-row row-tags">
-                <CheckboxDropdownGroup
-                  title="Tags"
-                  itemsList={tagsList}
-                  selected={filters.tags}
-                  onChange={tags => setFilter({tags})}
-                  min={1}
-                />
-
-              </Row>
+                <Form.Group controlId="exampleForm.ControlInput1">
+                  <Form.Label>Tag to search (eg. "place", "place=city")</Form.Label>
+                  <Form.Control type="text" placeholder={filters.tags[0]} onChange={tags => setFilter(tags)}/>
+                </Form.Group>
             </Tab>
             <Tab eventKey="search" title="Search (Experimental)">
                 <AddressSearchForm
@@ -78,7 +73,6 @@ function ItemsFilters({
             <LoadingButton
                 title="Get names"
                 variant="primary"
-                disabled={disabled.items}
                 onClick={getItems}
                 loading={loading.items}
             />

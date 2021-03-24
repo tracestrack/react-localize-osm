@@ -175,7 +175,7 @@ class App extends Component {
             searchParts.push(`search=${JSON.stringify(searchObj)}`);
         }
         else {
-            searchParts.push(`tags=${tags.join(",")}`);
+            searchParts.push(`tags=${tags}`);
             if(hideFilled)
                 searchParts.push(`hide_filled=1`);
         }
@@ -196,7 +196,8 @@ class App extends Component {
             this.getUser();
         }
     }
-    setServerMsg(serverMsg) {
+  setServerMsg(serverMsg) {
+    console.log(serverMsg);
         this.setState({serverMsg});
         const fn = () => {
             document.removeEventListener("click", fn);
@@ -267,7 +268,7 @@ class App extends Component {
             }
         });
     }
-    getItems() {
+  getItems() {
         this.setState({
             loading: {
                 ...this.state.loading,
@@ -320,7 +321,8 @@ class App extends Component {
         this.bbox = bbox;
     }
     updateItem(item, lang, value) {
-        item.tags[`name:${lang}`] = value;
+      item.tags[`name:${lang}`] = value;
+      /*
         if(!item.twins) {
             // get all the items with the same name and tags
             item.twins = [];
@@ -335,17 +337,17 @@ class App extends Component {
             item.twins.forEach(i => {
                 i.tags[`name:${lang}`] = value;
             });
-        }
+        }*/
         this.setState({itemsToUpdate: {
             ...this.state.itemsToUpdate,
             [item.id]: item
         }});
     }
-    setFilter(updates) {
+  setFilter(updates) {
         this.setState({
             filters: {
                 ...this.state.filters,
-                ...updates
+              ...{tags: updates.target.value}
             }
         }, () => this.updateLocation());
     }
@@ -356,15 +358,16 @@ class App extends Component {
                 updates: true
             }
         });
-        let items = {};
-        Object.values(this.state.itemsToUpdate)
+      let items = this.state.itemsToUpdate;
+/*        Object.values(this.state.itemsToUpdate)
             .forEach(i => {
             let {twins, ...self} = i;
             items[self.id] = self;
             twins.forEach(t => {
                 items[t.id] = t;
             });
-        });
+            }); */
+      console.log(items);
         this.osmApi.updateElements(items)
         .then(diff => {
             this.updatesStorage.patchAndStore(
