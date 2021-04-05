@@ -5,6 +5,23 @@ import Nominatim from "./Nominatim";
 // tag to identify changesets created by app
 const appTag = "OSM Localization Tool (OsmLT): https://localize.osm.tracestrack.com";
 
+
+var XML_CHAR_MAP = {
+	'<': '&lt;',
+	'>': '&gt;',
+	'&': '&amp;',
+	'"': '&quot;',
+	"'": '&apos;'
+};
+
+function escapeXml (s) {
+  if (typeof s !== "string") return s;
+
+  return s.replace(/[<>&"']/g, function (ch) {
+    return XML_CHAR_MAP[ch];
+  });
+}
+
 function json2xml(json) {
     return Object.entries(json)
     .map(([k, v]) => {
@@ -19,9 +36,10 @@ function json2xml(json) {
             } else if(typeof(v1) === "object") {
                 children += json2xml({[k1]: v1});
             } else {
-                attrs.push([k1, v1]);
+                attrs.push([k1, escapeXml(v1)]);
             }
         });
+
         const attrsStr = attrs.map(([k1, v1]) => `${k1}="${v1}"`).join(" ");
         return children ?
         `<${k} ${attrsStr}>${children}</${k}>`
