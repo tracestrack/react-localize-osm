@@ -8,6 +8,7 @@ import "./ItemsFilters.css";
 import { Col } from 'react-bootstrap';
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import React, { useCallback } from 'react'
 
 
 function ItemsFilters({
@@ -24,6 +25,16 @@ function ItemsFilters({
 }) {
 
   console.log(filters.tags[0]);
+
+  const onKeyUp = useCallback(
+    (e) => {
+      if (e.charCode === 13) {
+        getItems();
+      }
+    },
+    [], // Tells React to memoize regardless of arguments.
+  );
+
 
     return (
     <Form className="item-filters">
@@ -45,7 +56,7 @@ function ItemsFilters({
             <Tab eventKey="tags" title="Tags">
                 <Form.Group controlId="exampleForm.ControlInput1">
                   <Form.Label>Tag to search (eg. "place", "place=city")</Form.Label>
-                  <Form.Control type="text" placeholder={filters.tags[0]} onChange={tags => setFilter(tags)}/>
+                  <Form.Control type="text" placeholder={filters.tags[0]} onChange={tags => setFilter(tags)} onKeyPress={onKeyUp} />
                 </Form.Group>
             </Tab>
             <Tab eventKey="search" title="Search (Experimental)">
