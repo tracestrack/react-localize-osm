@@ -93,6 +93,7 @@ function createOsmChange(updates, changesetId) {
 
 const constrain = coords => coords.map((c, i) => i % 2 ? (c+180) % 360 - 180 : c % 90);
 
+/*
 function uniq(items, tags) {
     const un = {};
     return items.filter(i => {
@@ -103,7 +104,7 @@ function uniq(items, tags) {
         }
         return false;
     });
-}
+}*/
 
 export default class OSMApi {
     constructor(config) {

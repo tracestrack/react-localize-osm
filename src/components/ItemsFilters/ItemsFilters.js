@@ -8,7 +8,7 @@ import "./ItemsFilters.css";
 import { Col } from 'react-bootstrap';
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
 
 function ItemsFilters({
@@ -32,7 +32,7 @@ function ItemsFilters({
         getItems();
       }
     },
-    [], // Tells React to memoize regardless of arguments.
+    [getItems], // Tells React to memoize regardless of arguments.
   );
 
 
