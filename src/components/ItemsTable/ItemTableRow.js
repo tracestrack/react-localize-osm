@@ -28,7 +28,7 @@ export default function Item({
             </td>
             <td>
 
-              {item.tags.wikidata && (<span><a target="_blank" href={`https://www.wikidata.org/wiki/${item.tags.wikidata}`}>{item.tags.name}</a></span>)}
+              {item.tags.wikidata && (<span><a target="_blank" rel="noreferrer" href={`https://www.wikidata.org/wiki/${item.tags.wikidata}`}>{item.tags.name}</a></span>)}
               {!item.tags.wikidata && (<span>{item.tags.name}</span>)}
 
                 <i 
