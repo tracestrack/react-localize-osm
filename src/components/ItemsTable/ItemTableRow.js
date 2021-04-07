@@ -27,7 +27,10 @@ export default function Item({
                 </Badge>
             </td>
             <td>
-                <span>{item.tags.name}</span>
+
+              {item.tags.wikidata && (<span><a target="_blank" href={`https://www.wikidata.org/wiki/${item.tags.wikidata}`}>{item.tags.name}</a></span>)}
+              {!item.tags.wikidata && (<span>{item.tags.name}</span>)}
+
                 <i 
                     className="fa fa-crosshairs icon-btn mt-1" 
                     style={{float: "right"}} 
