@@ -343,13 +343,15 @@ class App extends Component {
             [item.id]: item
         }});
     }
-  setFilter(updates) {
+  setFilter(updates, doneCb) {
+    console.log(updates);
         this.setState({
             filters: {
                 ...this.state.filters,
-              ...{tags: updates.target.value}
+              ...{tags: updates}
             }
-        }, () => this.updateLocation());
+        }, () => {this.updateLocation();
+                  doneCb()});
     }
     updateItems() {
         this.setState({

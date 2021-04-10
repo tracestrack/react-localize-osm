@@ -1,4 +1,4 @@
-
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from "react-bootstrap/Row";
 import CheckboxDropdownGroup from "./CheckboxDropdownGroup";
@@ -24,8 +24,6 @@ function ItemsFilters({
     setLanguages
 }) {
 
-  console.log(filters.tags[0]);
-
   const onKeyUp = useCallback(
     (e) => {
       if (e.charCode === 13) {
@@ -35,6 +33,15 @@ function ItemsFilters({
     [getItems], // Tells React to memoize regardless of arguments.
   );
 
+
+  const onClickShortcut = useCallback(
+    (e) => {
+      let t = e.target.innerText;
+      console.log(t);
+      setFilter(t, () => {getItems();});
+    },
+    [setFilter, getItems], // Tells React to memoize regardless of arguments.
+  );
 
     return (
     <Form className="item-filters">
@@ -55,8 +62,13 @@ function ItemsFilters({
         >
             <Tab eventKey="tags" title="Tags">
                 <Form.Group controlId="exampleForm.ControlInput1">
-                  <Form.Label>Tag to search (eg. "place", "place=city")</Form.Label>
-                  <Form.Control type="text" placeholder={filters.tags[0]} onChange={tags => setFilter(tags)} onKeyPress={onKeyUp} />
+                  <Form.Label>Tag to search: </Form.Label>
+                  <Button variant="outline-secondary" size="sm" onClick={onClickShortcut}>place=city</Button>
+                  <Button variant="outline-secondary" size="sm" onClick={onClickShortcut}>boundary</Button>
+                  <Button variant="outline-secondary" size="sm" onClick={onClickShortcut}>leisure</Button>
+                  <Button variant="outline-secondary" size="sm" onClick={onClickShortcut}>highway</Button>
+                  <Button variant="outline-secondary" size="sm" onClick={onClickShortcut}>waterway</Button>
+                  <Form.Control type="text" value={filters.tags} onChange={tags => setFilter(tags.target.value)} onKeyPress={onKeyUp} />
                 </Form.Group>
             </Tab>
             <Tab eventKey="search" title="Search (Experimental)">
