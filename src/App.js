@@ -100,10 +100,7 @@ class App extends Component {
                 .map(e => e.split("="))
             );
             if(params.tags) {
-                const cleanedTags = params.tags.split(",")
-                    .filter(t => tagsList.find(t1 => t1.key === t));
-                if(cleanedTags.length)
-                    filters.tags = cleanedTags;
+                  filters.tags = decodeURIComponent(params.tags);
             }
             if(params.search) {
                 try {
@@ -175,7 +172,7 @@ class App extends Component {
             searchParts.push(`search=${JSON.stringify(searchObj)}`);
         }
         else {
-            searchParts.push(`tags=${tags}`);
+            searchParts.push(`tags=${encodeURIComponent(tags)}`);
             if(hideFilled)
                 searchParts.push(`hide_filled=1`);
         }
@@ -351,7 +348,8 @@ class App extends Component {
               ...{tags: updates}
             }
         }, () => {this.updateLocation();
-                  doneCb()});
+                  if (doneCb) doneCb();
+                 });
     }
     updateItems() {
         this.setState({

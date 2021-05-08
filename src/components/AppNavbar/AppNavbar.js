@@ -13,7 +13,7 @@ export default function AppNavbar({user, login, logout, loading}) {
             bg="white"
         >
             <Navbar.Brand className="mr-auto">
-              LOSM    <span className="version">v{packageJson["version"]} by Tracestrack</span>
+              OSM Localization Tool (OsmLT)   <span className="version">v{packageJson["version"]} by Tracestrack</span>
             </Navbar.Brand>
         {user.loggedIn ? 
             <UserLoggedIn 
