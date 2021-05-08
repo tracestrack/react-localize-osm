@@ -80,18 +80,6 @@ function ItemsFilters({
                 />
             </Tab>
         </Tabs>
-        <Row className="d-flex align-items-center">
-          <Col>
-                <Form.Check 
-                    type="checkbox"
-                    className="mr-auto text-left"
-                    checked={filters.hideFilled}
-                    disabled={filters.mode === "search"}
-                    label="Hide filled"
-                    onChange={e => setFilter({hideFilled: e.target.checked})}
-                />
-          </Col>
-        </Row>
         <Row className="d-flex justify-content-end">
             <LoadingButton
                 title="Get names"

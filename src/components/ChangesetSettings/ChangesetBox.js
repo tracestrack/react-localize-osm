@@ -30,14 +30,10 @@ export default function ChangesetBox({
                 </Row>
                 <Row className="justify-content-center">
                     <Button 
-                        className="m-1"
-                        onClick={() => onUpdate({comment: newComment})}
-                    >
-                        Update
-                    </Button>
-                    <Button 
-                        className="m-1"
-                        onClick={onClose}
+                      className="m-1"
+                      onClick={() =>
+                        onClose({comment: newComment})
+                              }
                     >
                         Close changeset
                     </Button>

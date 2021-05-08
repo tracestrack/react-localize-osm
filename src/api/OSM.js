@@ -262,22 +262,24 @@ export default class OSMApi {
             return res.elements?.pop().open;
         })
     }
-    updateChangesetTags(changeset) {
-        return this.fetch(`/changeset/${this.currentChangeset}`, {
-            method: "PUT",
-            body: createOsm(changeset),
-            headers: {
-                'Content-Type': "text/plain"
-            }
-        });
-    }
-    closeChangeset() {
-        return this.fetch(`/changeset/${this.currentChangeset}/close`, {
-            method: "PUT"
+  closeChangeset(changeset, cb) {
+
+      this.fetch(`/changeset/${this.currentChangeset}`, {
+        method: "PUT",
+        body: createOsm(changeset),
+        headers: {
+          'Content-Type': "text/plain"
+        }
+      }).then(() => {
+        this.fetch(`/changeset/${this.currentChangeset}/close`, {
+          method: "PUT",
         }).then(() => {
-            this.currentChangeset = false;
-        })
+          this.currentChangeset = false;
+          cb();
+        });
+      });
     }
+
     updateChangeset(updates) {
         return this.fetch(`/changeset/${this.currentChangeset}/upload`, {
             method: "POST",

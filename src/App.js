@@ -138,22 +138,31 @@ class App extends Component {
             })
         }
     }
-    updateChangeset({comment}) {
-        this.setState({
-            changeset: {
+
+    closeChangeset({comment}) {
+      let changeset = {
                 ...this.state.changeset,
                 tags: {
                     ...this.state.changeset.tags,
                     comment
                 }
-            }
-        }, () => this.osmApi.updateChangesetTags(this.state.changeset));
+      };
+
+      if (changeset.tags.comment == "") {
+        alert("Please add a commit message first.");
+      }
+
+      console.log(changeset);
+
+      //let _t = this;
+      this.osmApi.closeChangeset(changeset, () => {
+        //_t.setState({changeset: null});
+        alert('Success! Page will reload.');
+        window.location.reload();
+      }
+      );
     }
-    closeChangeset() {
-        this.osmApi.closeChangeset().then(() => {
-            this.setState({changeset: null});
-        })
-    }
+
     updateLocation(replace=false) {
         const {
             zoom,
@@ -459,7 +468,6 @@ class App extends Component {
             onIconClick: this.centerItem.bind(this)
         };
         const changesetHandlers = {
-            onUpdate:   this.updateChangeset.bind(this),
             onClose:    this.closeChangeset.bind(this)
         };
 
