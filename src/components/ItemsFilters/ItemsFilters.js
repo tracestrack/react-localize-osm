@@ -5,7 +5,6 @@ import CheckboxDropdownGroup from "./CheckboxDropdownGroup";
 import LoadingButton from "../common/LoadingButton";
 import AddressSearchForm from "./AddressSearchForm";
 import "./ItemsFilters.css";
-import { Col } from 'react-bootstrap';
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import React, { useCallback } from 'react';

@@ -148,7 +148,7 @@ class App extends Component {
                 }
       };
 
-      if (changeset.tags.comment == "") {
+      if (changeset.tags.comment === "") {
         alert("Please add a commit message first.");
       }
 
