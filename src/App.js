@@ -158,7 +158,7 @@ class App extends Component {
       this.osmApi.closeChangeset(changeset, () => {
         //_t.setState({changeset: null});
         _t.cookieManager.write({
-          ["lastComment"]: comment
+          "lastComment": comment
         });
         window.location.reload();
       }
