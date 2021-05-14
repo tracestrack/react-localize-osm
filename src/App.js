@@ -154,10 +154,12 @@ class App extends Component {
 
       console.log(changeset);
 
-      //let _t = this;
+      let _t = this;
       this.osmApi.closeChangeset(changeset, () => {
         //_t.setState({changeset: null});
-        alert('Success! Page will reload.');
+        _t.cookieManager.write({
+          ["lastComment"]: comment
+        });
         window.location.reload();
       }
       );

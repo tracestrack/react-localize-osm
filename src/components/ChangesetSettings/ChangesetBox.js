@@ -4,6 +4,13 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 export default function ChangesetBox({
     changeset, 
     handlers: {onUpdate, onClose}}
@@ -11,7 +18,7 @@ export default function ChangesetBox({
     const [newComment, setComment] = useState(changeset?.tags.comment||"");
 
     useEffect(() => {
-        setComment(changeset?.tags.comment||"");
+        setComment(changeset?.tags.comment||getCookie("lastComment")||"");
     }, [changeset]);
 
     return (
