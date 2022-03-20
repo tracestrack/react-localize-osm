@@ -5,6 +5,7 @@
   "homepage": "/",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
+    "@react-leaflet/core": ">=1.0.0 <1.1.0 || ^1.1.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",
@@ -13,10 +14,10 @@
     "leaflet": "^1.7.1",
     "leaflet.awesome-markers": "^2.0.5",
     "osm-auth": "^1.1.0",
-    "react": "^17.0.1",
+    "react": "^17.0.2",
     "react-bootstrap": "^1.4.3",
-    "react-dom": "^17.0.1",
-    "react-leaflet": "^3.0.2",
+    "react-dom": "^17.0.2",
+    "react-leaflet": "^3.2.5",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4"
   },
@@ -32,18 +33,11 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@types/leaflet": "^1.5.19"
   }

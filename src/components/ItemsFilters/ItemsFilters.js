@@ -53,13 +53,7 @@ function ItemsFilters({
         min={1}
       />
 
-        <Tabs
-            defaultActiveKey="tags"
-            activeKey={filters.mode}
-            onSelect={(k) => setFilter({mode: k})}
-            transition={false}
-        >
-            <Tab eventKey="tags" title="Tags">
+
                 <Form.Group controlId="exampleForm.ControlInput1">
                   <Form.Label>Tag to search: </Form.Label>
                   <Button variant="outline-secondary" size="sm" onClick={onClickShortcut}>place=city</Button>
@@ -69,16 +63,7 @@ function ItemsFilters({
                   <Button variant="outline-secondary" size="sm" onClick={onClickShortcut}>waterway</Button>
                   <Form.Control type="text" value={filters.tags} onChange={tags => setFilter(tags.target.value)} onKeyPress={onKeyUp} />
                 </Form.Group>
-            </Tab>
-            <Tab eventKey="search" title="Search (Experimental)">
-                <AddressSearchForm
-                    search={filters.search}
-                    mode={filters.searchMode}
-                    onModeChange={mode => setFilter({searchMode: mode})}
-                    onUpdate={search => setFilter({search})}
-                />
-            </Tab>
-        </Tabs>
+
         <Row className="d-flex justify-content-end">
             <LoadingButton
                 title="Get names"
