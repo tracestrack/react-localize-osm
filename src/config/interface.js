@@ -7,14 +7,14 @@ const languagesList = [
     { key: "ru", title: "Русский" },
     { key: "zh-Hans", title: "简体中文" },
     { key: "zh-Hant", title: "繁体中文" },
-    { key: "zh", title: "中文" }
-    { key: "ml", title: "മലയാളം" }
-    { key: "ta", title: "தமிழ்" }
-    { key: "kn", title: "ಕನ್ನಡ" }
-    { key: "bn", title: "বাংলা" }
-    { key: "te", title: "తెలుగు" }
-    { key: "pa", title: "ਪੰਜਾਬੀ" }
-    { key: "hi", title: "हिन्दी" }
+    { key: "zh", title: "中文" },
+    { key: "ml", title: "മലയാളം" },
+    { key: "ta", title: "தமிழ்" },
+    { key: "kn", title: "ಕನ್ನಡ" },
+    { key: "bn", title: "বাংলা" },
+    { key: "te", title: "తెలుగు" },
+    { key: "pa", title: "ਪੰਜਾਬੀ" },
+    { key: "hi", title: "हिन्दी" },
     { key: "it", title: "Italiano" }
 
 
