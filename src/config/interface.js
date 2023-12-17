@@ -15,9 +15,8 @@ const languagesList = [
     { key: "te", title: "తెలుగు" },
     { key: "pa", title: "ਪੰਜਾਬੀ" },
     { key: "hi", title: "हिन्दी" },
-    { key: "it", title: "Italiano" }
-
-
+    { key: "it", title: "Italiano" },
+    { key: "or", title: "ଓଡ଼ିଆ" }
 ];
 
 const tagsList = [
