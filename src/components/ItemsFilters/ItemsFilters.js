@@ -3,10 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from "react-bootstrap/Row";
 import CheckboxDropdownGroup from "./CheckboxDropdownGroup";
 import LoadingButton from "../common/LoadingButton";
-import AddressSearchForm from "./AddressSearchForm";
 import "./ItemsFilters.css";
-import Tabs from "react-bootstrap/Tabs";
-import Tab from "react-bootstrap/Tab";
 import React, { useCallback } from 'react';
 
 
