@@ -30,13 +30,3 @@ jobs:
     - name: Automated Version Bump
       if: github.ref == 'refs/heads/main'
       uses:  'phips28/gh-action-bump-version@master'
-
-    - name: 🎉 Deploy
-      if: github.ref == 'refs/heads/main'
-      uses: SamKirkland/FTP-Deploy-Action@4.0.0
-      with:
-        server: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        local-dir: "build/"
-        server-dir: ${{ secrets.TARGET_PATH }}
