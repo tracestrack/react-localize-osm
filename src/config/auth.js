@@ -6,7 +6,8 @@ const mainServer = {
     url:                "https://www.openstreetmap.org",
     redirect_uri: 'https://localize.osm.tracestrack.com/land.html',
     apiUrl: 'https://api.openstreetmap.org',
-    scope: 'write_api'
+    scope: 'openid write_api read_prefs',
+    auto: true
 };
 
 // use this when testing new features to not spoil main osm database
