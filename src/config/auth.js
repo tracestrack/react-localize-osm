@@ -1,16 +1,21 @@
 /* eslint-disable */
 
 const mainServer = {
-    oauth_consumer_key: "p2szywibtwHNFh1RZVNq21uCo9XBuUZvEwz0sYae",
-    oauth_secret:       "e2oP3FSVjFLEq3zgQylpYMVVX7QJUKcchJLh4Ksm",
+    client_id: "M8nzCZPZGnlJoSrGAMbzsGXXZYtMPg_eyoyEjCyCydo",
+    client_secret:       "SdRMd2ReOVMO0VeWVdNuhY0hyYgbbLwMGAusMnO47Hs ",
     url:                "https://www.openstreetmap.org",
+    redirect_uri: 'https://localize.osm.tracestrack.com/land.html',
+    apiUrl: 'https://api.openstreetmap.org',
+    scope: 'write_api'
 };
 
 // use this when testing new features to not spoil main osm database
 const devServer = {
-    oauth_consumer_key: '8CxsQfI9MFfsYm4nq8bBm6Htch3SiK9BFA8IQhHs',
-    oauth_secret:       'SZka3I7w1Z41ePlQDauVwLLt6UIG4LLDbaWhNHkM',
-    url:                "https://master.apis.dev.openstreetmap.org"
+    client_id: 'M8nzCZPZGnlJoSrGAMbzsGXXZYtMPg_eyoyEjCyCydo',
+    client_secret:       'SdRMd2ReOVMO0VeWVdNuhY0hyYgbbLwMGAusMnO47Hs',
+    url:                "https://master.apis.dev.openstreetmap.org",
+    redirect_uri: 'http://127.0.0.1:8080/land.html',
+    apiUrl: 'https://api.openstreetmap.org',
 };
 
 const authConfig = {   

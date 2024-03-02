@@ -1,4 +1,4 @@
-import osmAuth from "osm-auth";
+import {osmAuth} from "osm-auth";
 import Overpass from "./Overpass";
 import Nominatim from "./Nominatim";
 

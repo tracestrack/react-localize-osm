@@ -13,7 +13,7 @@
     "history": "^5.0.0",
     "leaflet": "^1.7.1",
     "leaflet.awesome-markers": "^2.0.5",
-    "osm-auth": "^1.1.0",
+    "osm-auth": "^2.4.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.4.3",
     "react-dom": "^17.0.2",
