@@ -233,6 +233,7 @@ class App extends Component {
         return str ? str.split("+") : false;
     }
     setLanguages(languages) {
+        
         this.setState({
             user: {
                 ...this.state.user,
