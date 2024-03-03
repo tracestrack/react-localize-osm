@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 const OSMtiles = {
-    tileUrl: "https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=ad185d84befbbb5463e093c682930866",
+    tileUrl: "https://tile.tracestrack.com/auto-en/{z}/{x}/{y}.png?key=ad185d84befbbb5463e093c682930866",
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 };
 
