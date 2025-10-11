@@ -1,10 +1,10 @@
 
 export default function ItemTableHeader({languages, onClick}) {
-    const titles =  ["Category", "Name",...languages.map(lang => `name:${lang}`)];
+    const titles =  ["ID", "Type", "Category", "Name",...languages.map(lang => `name:${lang}`)];
     return (
         <tr>
-        {titles.map(title => 
-            (<th 
+        {titles.map(title =>
+            (<th
                 style={{cursor: "pointer"}}
                 key={title}
                 onClick={() => onClick(title.toLowerCase())}

@@ -1,8 +1,7 @@
-import {Fragment, Component} from "react";
+import {Component} from "react";
 import Container from 'react-bootstrap/Container';
 import Card from "react-bootstrap/Card";
 import Map from "./components/Map";
-import NotLoggedInGreeting from "./components/NotLoggedInGreeting";
 import ItemsFilters from "./components/ItemsFilters";
 import ItemsTable from "./components/ItemsTable";
 import AppNavbar from "./components/AppNavbar";
@@ -140,6 +139,12 @@ class App extends Component {
     }
 
     closeChangeset({comment}) {
+      // Check if user is authenticated
+      if(!this.state.user.loggedIn && !authConfig.devMode) {
+        alert("Please log in to close changeset on OpenStreetMap.");
+        return;
+      }
+
       // In dev mode, simulate changeset close
       if(authConfig.devMode) {
         if (comment === "") {
@@ -219,6 +224,15 @@ class App extends Component {
             this.activateDevMode();
         } else if(this.osmApi.authenticated()) {
             this.getUser();
+        } else {
+            // Initialize with default languages for non-logged-in users
+            let languages = this.getLanguages() || ["en"];
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    languages
+                }
+            });
         }
     }
 
@@ -401,6 +415,15 @@ class App extends Component {
                  });
     }
     updateItems() {
+        // Check if user is authenticated
+        if(!this.state.user.loggedIn && !authConfig.devMode) {
+            this.setServerMsg({
+                text: "Please log in to update items on OpenStreetMap.",
+                error: true
+            });
+            return;
+        }
+
         // In dev mode, simulate successful update without actually calling API
         if(authConfig.devMode) {
             this.setState({
@@ -562,48 +585,42 @@ class App extends Component {
                 />
                 <Card
                     className="card-items card p-1"
-                >{
-                this.state.user.loggedIn ?
-                    <Fragment>
-                        <Card.Header>
-                            <ItemsFilters
-                                filters={this.state.filters}
-                                setFilter={this.setFilter.bind(this)}
-                                tagsList={tagsList}
-                                loading={this.state.loading}
-                                languages={this.state.user.languages||[]}
-                                languagesList={languagesList}
-                                setLanguages={this.setLanguages.bind(this)}
-                                items={this.state.items}
-                                getItems={this.getItems.bind(this)}
-                                disabled={btnsDisabled}
-                                updateItems={this.updateItems.bind(this)}
-                            />
-                            <div className={this.state.serverMsg.error ?
-                                              "text-danger"
-                                            : "text-success"}>
-                                {this.state.serverMsg.text}
-                            </div>
-                        </Card.Header>
-                        <Card.Body
-                            className={this.state.loading.items ?
-                                      "items-loading"
-                                      : ""}
-                        >
-                            <ItemsTable
-                                categories={tags}
-                                languages={this.state.user.languages||[]}
-                                items={this.state.items}
-                                focused={this.state.focusedItem}
-                                handlers={itemHandlers}
-                            />
+                >
+                    <Card.Header>
+                        <ItemsFilters
+                            filters={this.state.filters}
+                            setFilter={this.setFilter.bind(this)}
+                            tagsList={tagsList}
+                            loading={this.state.loading}
+                            languages={this.state.user.languages||[]}
+                            languagesList={languagesList}
+                            setLanguages={this.setLanguages.bind(this)}
+                            items={this.state.items}
+                            getItems={this.getItems.bind(this)}
+                            disabled={btnsDisabled}
+                            updateItems={this.updateItems.bind(this)}
+                        />
+                        <div className={this.state.serverMsg.error ?
+                                          "text-danger"
+                                        : "text-success"}>
+                            {this.state.serverMsg.text}
+                        </div>
+                    </Card.Header>
+                    <Card.Body
+                        className={this.state.loading.items ?
+                                  "items-loading"
+                                  : ""}
+                    >
+                        <ItemsTable
+                            categories={tags}
+                            languages={this.state.user.languages||[]}
+                            items={this.state.items}
+                            focused={this.state.focusedItem}
+                            handlers={itemHandlers}
+                        />
 
-                        </Card.Body>
-                    </Fragment>
-                    :  <Card.Body className="d-flex align-items-center justify-content-center">
-                            <NotLoggedInGreeting />
-                        </Card.Body>
-                }</Card>
+                    </Card.Body>
+                </Card>
                 <ChangesetSettings
                     changeset={this.state.changeset}
                     handlers={changesetHandlers}

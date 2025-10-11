@@ -16,13 +16,36 @@ export default function Item({
         }
     }, [focused, item]);
     
+    const osmUrl = `https://www.openstreetmap.org/${item.type}/${item.id}`;
+
+    const typeColors = {
+        node: 'primary',
+        way: 'success',
+        relation: 'warning'
+    };
+
     return (
         <tr>
+            <td className="id-cell">
+                <a
+                    href={osmUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={`View ${item.type} ${item.id} on OpenStreetMap`}
+                >
+                    {item.id}
+                </a>
+            </td>
+            <td className="type-cell">
+                <Badge bg={typeColors[item.type] || 'secondary'} className="text-capitalize">
+                    {item.type}
+                </Badge>
+            </td>
             <td className="category">
-                <Badge variant="info">
+                <Badge bg="info">
                     {category}
                 </Badge><br />
-                <Badge variant="light">
+                <Badge bg="light" text="dark">
                     {item.tags[category]}
                 </Badge>
             </td>
@@ -31,9 +54,9 @@ export default function Item({
               {item.tags.wikidata && (<span><a target="_blank" rel="noreferrer" href={`https://www.wikidata.org/wiki/${item.tags.wikidata}`}>{item.tags.name}</a></span>)}
               {!item.tags.wikidata && (<span>{item.tags.name}</span>)}
 
-                <i 
-                    className="fa fa-crosshairs icon-btn mt-1" 
-                    style={{float: "right"}} 
+                <i
+                    className="fa fa-crosshairs icon-btn mt-1"
+                    style={{float: "right"}}
                     onClick={() => onIconClick(item)}
                 />
             </td>
@@ -43,7 +66,7 @@ export default function Item({
                     type="text"
                     id={item.id + lang}
                     ref={i ? null : firstInput}
-                    value={item.tags[`name:${lang}`]||""}    
+                    value={item.tags[`name:${lang}`]||""}
                     onChange={e => onChange(item, lang, e.target.value)}
                     onFocus={() => focused ? null : onFocus(item.id)}
                     onBlur={() => focused ? onBlur(item.id) : null}

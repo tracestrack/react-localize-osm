@@ -18,7 +18,9 @@
 }
 
 .card.card-items .card-header {
-    background: none;
+    background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.75rem 1rem;
 }
 
 .card.card-items  .card-body {

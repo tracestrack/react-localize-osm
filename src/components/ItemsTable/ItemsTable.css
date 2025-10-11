@@ -1,29 +1,104 @@
 
+/* Modern table styling */
+table {
+    border-spacing: 0px;
+    font-size: 0.9rem;
+}
+
 th {
     position: sticky;
     top: 0px;
-    background: white;
+    background: linear-gradient(to bottom, #f8f9fa 0%, #f1f3f5 100%);
     border-top: none!important;
-    border-bottom: none!important;
-    box-shadow: 0 1px 0 #dee2e6;
+    border-bottom: 2px solid #dee2e6!important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     z-index: 2;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #495057;
+    padding: 0.75rem 0.5rem;
 }
-table {
-    border-spacing: 0px;
+
+th:hover {
+    background: linear-gradient(to bottom, #e9ecef 0%, #dee2e6 100%);
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+td {
+    padding: 0.6rem 0.5rem;
+    vertical-align: middle!important;
 }
 
 td input {
     max-width: 150px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+td input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 td.category {
     white-space: nowrap;
-    vertical-align: middle!important;
 }
 
+td.id-cell {
+    white-space: nowrap;
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+td.id-cell a {
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+td.id-cell a:hover {
+    color: #004499;
+    text-decoration: underline;
+}
+
+td.type-cell {
+    white-space: nowrap;
+    text-align: center;
+}
+
+td.type-cell .badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+    font-weight: 500;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+    border-radius: 0.25rem;
+}
 
 .icon-btn {
     cursor: pointer;
     opacity: .7;
+    transition: opacity 0.2s ease;
 }
-.icon-btn:hover { opacity: 1 }
+
+.icon-btn:hover {
+    opacity: 1;
+}

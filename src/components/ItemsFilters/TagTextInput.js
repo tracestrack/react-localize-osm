@@ -25,10 +25,13 @@ export default function TagTextInput({ title, selected, onChange }) {
     return (
         <Form.Group controlId="formBasicEmail">
             <Form.Label>{title}</Form.Label>
-            <Form.Control type="tags" placeholder="Enter language codes. Example: en, nl, zh" defaultValue={selected} onChange={onTextChange} />
-            <Form.Text className="text-muted">
-                Use comma to separate languages. Example: en, nl, zh
-            </Form.Text>
+            <Form.Control
+                type="tags"
+                size="sm"
+                placeholder="e.g. en, nl, zh"
+                defaultValue={selected}
+                onChange={onTextChange}
+            />
         </Form.Group>
     );
 }
