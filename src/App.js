@@ -140,6 +140,20 @@ class App extends Component {
     }
 
     closeChangeset({comment}) {
+      // In dev mode, simulate changeset close
+      if(authConfig.devMode) {
+        if (comment === "") {
+          alert("Please add a commit message first.");
+          return;
+        }
+        console.log("[DEV MODE] Changeset close simulated - no actual API call");
+        this.cookieManager.write({
+          "lastComment": comment
+        });
+        this.setState({changeset: null});
+        return;
+      }
+
       let changeset = {
                 ...this.state.changeset,
                 tags: {
@@ -200,9 +214,26 @@ class App extends Component {
             window.history.pushState({searchQ, hash}, '', url);
     }
     componentDidMount() {
-        if(this.osmApi.authenticated()) {
+        // In dev mode, automatically log in with mock user
+        if(authConfig.devMode) {
+            this.activateDevMode();
+        } else if(this.osmApi.authenticated()) {
             this.getUser();
         }
+    }
+
+    activateDevMode() {
+        // Set mock user data for development
+        let languages = this.getLanguages() || authConfig.mockUser.languages;
+        this.setState({
+            user: {
+                loggedIn: true,
+                ...authConfig.mockUser,
+                languages
+            }
+        });
+        this.storeLanguages(languages);
+        console.log("Development mode activated - authentication bypassed");
     }
   setServerMsg(serverMsg) {
     console.log(serverMsg);
@@ -217,6 +248,12 @@ class App extends Component {
         document.addEventListener("click", fn);
     }
     login() {
+        // In dev mode, skip actual authentication
+        if(authConfig.devMode) {
+            this.activateDevMode();
+            return;
+        }
+
         this.setState({
             loading: {
                 ...this.state.loading,
@@ -364,6 +401,32 @@ class App extends Component {
                  });
     }
     updateItems() {
+        // In dev mode, simulate successful update without actually calling API
+        if(authConfig.devMode) {
+            this.setState({
+                loading: {
+                    ...this.state.loading,
+                    updates: true
+                }
+            });
+
+            setTimeout(() => {
+                this.setServerMsg({
+                    text: "[DEV MODE] Items simulation - no actual update sent to OSM.",
+                    error: false
+                });
+
+                this.setState({
+                    itemsToUpdate: {},
+                    loading: {
+                        ...this.state.loading,
+                        updates: false
+                    }
+                });
+            }, 500);
+            return;
+        }
+
         this.setState({
             loading: {
                 ...this.state.loading,
