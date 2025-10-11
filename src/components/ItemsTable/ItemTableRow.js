@@ -6,6 +6,7 @@ export default function Item({
     filterTags,
     languages,
     focused,
+    showTags,
     handlers: {onFocus, onBlur, onChange, onIconClick}
 }) {
     const firstInput = useRef(null);
@@ -105,33 +106,35 @@ export default function Item({
                     />
                 </td>))}
             </tr>
-            <tr className="tags-row">
-                <td colSpan={columnCount} className="tags-cell">
-                    <div className="tags-label">Tags:</div>
-                    {relevantTags.map(([key, value]) => {
-                        const isHighlighted = isFilterTag(key, value);
-                        const isNameTag = key === 'name' || key.startsWith('name:');
+            {showTags && (
+                <tr className="tags-row">
+                    <td colSpan={columnCount} className="tags-cell">
+                        <div className="tags-label">Tags:</div>
+                        {relevantTags.map(([key, value]) => {
+                            const isHighlighted = isFilterTag(key, value);
+                            const isNameTag = key === 'name' || key.startsWith('name:');
 
-                        return (
-                            <span key={key} className="tag-pair">
-                                <Badge
-                                    bg={isHighlighted ? "warning" : (isNameTag ? "secondary" : "info")}
-                                    className={isHighlighted ? "filter-tag" : ""}
-                                >
-                                    {key}
-                                </Badge>
-                                <Badge
-                                    bg="light"
-                                    text="dark"
-                                    className={isHighlighted ? "filter-tag-value" : ""}
-                                >
-                                    {value}
-                                </Badge>
-                            </span>
-                        );
-                    })}
-                </td>
-            </tr>
+                            return (
+                                <span key={key} className="tag-pair">
+                                    <Badge
+                                        bg={isHighlighted ? "warning" : (isNameTag ? "secondary" : "info")}
+                                        className={isHighlighted ? "filter-tag" : ""}
+                                    >
+                                        {key}
+                                    </Badge>
+                                    <Badge
+                                        bg="light"
+                                        text="dark"
+                                        className={isHighlighted ? "filter-tag-value" : ""}
+                                    >
+                                        {value}
+                                    </Badge>
+                                </span>
+                            );
+                        })}
+                    </td>
+                </tr>
+            )}
         </>
     );
 }

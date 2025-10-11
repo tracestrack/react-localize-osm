@@ -50,6 +50,7 @@ class App extends Component {
             itemsToUpdate: {},
             focusedItem: false,
             watchFocus: false, // center map on focused item
+            showTags: false, // toggle for showing tags in table
             loading: {
                 items: false,
                 updates: false,
@@ -78,6 +79,7 @@ class App extends Component {
     parseURLQuery() {
         const filters = {
             tags: ["place"],
+            osmType: "node",
             limit: 100,
             hideFilled: false,
             search: {
@@ -405,14 +407,20 @@ class App extends Component {
     }
   setFilter(updates, doneCb) {
     console.log(updates);
+        // If updates is a string, treat it as tags update for backwards compatibility
+        const filterUpdates = typeof updates === 'string'
+            ? { tags: updates }
+            : updates;
+
         this.setState({
             filters: {
                 ...this.state.filters,
-              ...{tags: updates}
+                ...filterUpdates
             }
-        }, () => {this.updateLocation();
-                  if (doneCb) doneCb();
-                 });
+        }, () => {
+            this.updateLocation();
+            if (doneCb) doneCb();
+        });
     }
     updateItems() {
         // Check if user is authenticated
@@ -527,6 +535,11 @@ class App extends Component {
             zoom: Math.max(this.state.zoom, itemMinZoom)
         });
     }
+    toggleTags() {
+        this.setState({
+            showTags: !this.state.showTags
+        });
+    }
     render() {
         const btnsDisabled = {
             // query for a large bbox is too slow and won't work
@@ -605,6 +618,9 @@ class App extends Component {
                             getItems={this.getItems.bind(this)}
                             disabled={btnsDisabled}
                             updateItems={this.updateItems.bind(this)}
+                            showTags={this.state.showTags}
+                            toggleTags={this.toggleTags.bind(this)}
+                            itemCount={this.state.items.filter(i => i.tags.name).length}
                         />
                         <div className={this.state.serverMsg.error ?
                                           "text-danger"
@@ -623,6 +639,7 @@ class App extends Component {
                             items={this.state.items}
                             focused={this.state.focusedItem}
                             handlers={itemHandlers}
+                            showTags={this.state.showTags}
                         />
 
                     </Card.Body>

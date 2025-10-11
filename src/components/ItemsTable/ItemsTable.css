@@ -30,29 +30,41 @@ tbody tr.main-row {
     border-bottom: none;
 }
 
+tbody tr.main-row:has(+ tr.tags-row) {
+    border-bottom: none;
+}
+
+tbody tr.main-row:not(:has(+ tr.tags-row)) {
+    border-bottom: 2px solid #dee2e6;
+}
+
 tbody tr.tags-row {
     border-bottom: 2px solid #dee2e6;
 }
 
-/* Alternating row colors - apply to main-row */
-tbody tr.main-row:nth-child(4n+1) {
+/* Alternating row colors using nth-of-type for main-row only */
+tbody tr.main-row:nth-of-type(odd) {
     background-color: #ffffff;
 }
 
-tbody tr.main-row:nth-child(4n+3) {
+tbody tr.main-row:nth-of-type(even) {
     background-color: #f8f9fa;
 }
 
-/* Tags row inherits the same background as its main row */
-tbody tr.tags-row:nth-child(4n+2) {
+/* Tags row inherits background from previous main row */
+tbody tr.main-row:nth-of-type(odd) + tr.tags-row {
     background-color: #ffffff;
 }
 
-tbody tr.tags-row:nth-child(4n+4) {
+tbody tr.main-row:nth-of-type(even) + tr.tags-row {
     background-color: #f8f9fa;
 }
 
-tbody tr.main-row:hover,
+/* Hover effects */
+tbody tr.main-row:hover {
+    background-color: #e9ecef;
+}
+
 tbody tr.main-row:hover + tr.tags-row {
     background-color: #e9ecef;
 }
@@ -135,6 +147,7 @@ tr.tags-row td.tags-cell {
     padding: 0.5rem 0.75rem;
     background-color: inherit;
     font-size: 0.85rem;
+    text-align: left;
 }
 
 .tags-label {
@@ -145,6 +158,7 @@ tr.tags-row td.tags-cell {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    vertical-align: top;
 }
 
 .tag-pair {

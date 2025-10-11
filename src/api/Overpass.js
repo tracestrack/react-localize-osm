@@ -65,7 +65,15 @@ export default class Overpass {
         condition = condition.replace("=", '"="');
       }
 
-        const baseEls = [`nwr["${condition}"]["name"]`];
+        // Map osmType to Overpass query type
+        const typeMap = {
+            'node': 'node',
+            'way': 'way',
+            'relation': 'relation'
+        };
+        const osmType = typeMap[filters.osmType] || 'node';
+
+        const baseEls = [`${osmType}["${condition}"]["name"]`];
         const elementsQuery = filters.hideFilled ?
             baseEls.map(base =>
                 languages.map(l => `${base}[!"name:${l}"]`)

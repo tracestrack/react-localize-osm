@@ -1,6 +1,8 @@
 import Form from 'react-bootstrap/Form';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Button from "react-bootstrap/Button";
 import TagTextInput from "./TagTextInput";
 import LoadingButton from "../common/LoadingButton";
 import "./ItemsFilters.css";
@@ -17,7 +19,10 @@ function ItemsFilters({
   disabled,
   loading,
   updateItems,
-  setLanguages
+  setLanguages,
+  showTags,
+  toggleTags,
+  itemCount
 }) {
 
   const onKeyUp = useCallback(
@@ -34,9 +39,23 @@ function ItemsFilters({
     (e) => {
       let t = e.target.innerText;
       console.log(t);
-      setFilter(t, () => { getItems(); });
+      setFilter({...filters, tags: t}, () => { getItems(); });
     },
-    [setFilter, getItems], // Tells React to memoize regardless of arguments.
+    [setFilter, getItems, filters], // Tells React to memoize regardless of arguments.
+  );
+
+  const onTypeChange = useCallback(
+    (type) => {
+      setFilter({...filters, osmType: type});
+    },
+    [setFilter, filters]
+  );
+
+  const onTagsChange = useCallback(
+    (tags) => {
+      setFilter({...filters, tags: tags.target.value});
+    },
+    [setFilter, filters]
   );
 
   return (
@@ -68,14 +87,50 @@ function ItemsFilters({
               size="sm"
               placeholder="e.g. amenity=restaurant, place=city"
               value={filters.tags}
-              onChange={tags => setFilter(tags.target.value)}
+              onChange={onTagsChange}
               onKeyPress={onKeyUp}
             />
           </Form.Group>
         </Col>
       </Row>
-      <Row>
-        <Col className="d-flex justify-content-end gap-2">
+      <Row className="mb-2 align-items-center">
+        <Col md={3}>
+          <div className="d-flex align-items-center gap-2">
+            <Form.Label className="mb-0 me-2">Type</Form.Label>
+            <ButtonGroup size="sm">
+              <Button
+                variant={filters.osmType === 'node' ? 'primary' : 'outline-primary'}
+                onClick={() => onTypeChange('node')}
+              >
+                Node
+              </Button>
+              <Button
+                variant={filters.osmType === 'way' ? 'primary' : 'outline-primary'}
+                onClick={() => onTypeChange('way')}
+              >
+                Way
+              </Button>
+              <Button
+                variant={filters.osmType === 'relation' ? 'primary' : 'outline-primary'}
+                onClick={() => onTypeChange('relation')}
+              >
+                Relation
+              </Button>
+            </ButtonGroup>
+          </div>
+        </Col>
+        <Col md={9} className="d-flex justify-content-end gap-2">
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            onClick={toggleTags}
+          >
+            <i className={`fa fa-${showTags ? 'eye-slash' : 'eye'} me-1`}></i>
+            {showTags ? 'Hide' : 'Show'} Tags
+          </Button>
+          <span className="text-muted small align-self-center me-2">
+            {itemCount} items
+          </span>
           <LoadingButton
             title="Get names"
             variant="primary"

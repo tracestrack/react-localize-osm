@@ -15,7 +15,8 @@ function ItemsTable({
     handlers,
     items,
     focused,
-    filterTags
+    filterTags,
+    showTags
 }) {
     const [sortField, setField] = useState("name");
     const [sortOrder, setOrder] = useState(1);
@@ -48,6 +49,7 @@ function ItemsTable({
                         item={item}
                         focused={focused === item.id}
                         handlers={handlers}
+                        showTags={showTags}
                     />)
                     )}
                 </tbody>
