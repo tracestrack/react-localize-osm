@@ -1,6 +1,6 @@
 
 export default function ItemTableHeader({languages, onClick}) {
-    const titles =  ["ID", "Type", "Category", "Name",...languages.map(lang => `name:${lang}`)];
+    const titles =  ["ID", "Type", "Name",...languages.map(lang => `name:${lang}`)];
     return (
         <tr>
         {titles.map(title =>

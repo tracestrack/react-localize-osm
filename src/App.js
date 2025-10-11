@@ -564,7 +564,13 @@ class App extends Component {
             this.state.user.languages[0]
             : "en";
 
-        const tags = tagsList.map(t => t.key);
+        // Parse filter tags for highlighting
+        const filterTags = Array.isArray(this.state.lastReqTags)
+            ? this.state.lastReqTags
+            : (typeof this.state.lastReqTags === 'string'
+                ? this.state.lastReqTags.split(',').map(t => t.trim())
+                : []);
+
         return (
             <Container className="App" fluid>
                 <AppNavbar
@@ -612,7 +618,7 @@ class App extends Component {
                                   : ""}
                     >
                         <ItemsTable
-                            categories={tags}
+                            filterTags={filterTags}
                             languages={this.state.user.languages||[]}
                             items={this.state.items}
                             focused={this.state.focusedItem}

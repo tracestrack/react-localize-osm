@@ -25,13 +25,40 @@ th:hover {
     background: linear-gradient(to bottom, #e9ecef 0%, #dee2e6 100%);
 }
 
-tbody tr {
+tbody tr.main-row {
     transition: background-color 0.2s ease;
-    border-bottom: 1px solid #f1f3f5;
+    border-bottom: none;
 }
 
-tbody tr:hover {
+tbody tr.tags-row {
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Alternating row colors - apply to main-row */
+tbody tr.main-row:nth-child(4n+1) {
+    background-color: #ffffff;
+}
+
+tbody tr.main-row:nth-child(4n+3) {
     background-color: #f8f9fa;
+}
+
+/* Tags row inherits the same background as its main row */
+tbody tr.tags-row:nth-child(4n+2) {
+    background-color: #ffffff;
+}
+
+tbody tr.tags-row:nth-child(4n+4) {
+    background-color: #f8f9fa;
+}
+
+tbody tr.main-row:hover,
+tbody tr.main-row:hover + tr.tags-row {
+    background-color: #e9ecef;
+}
+
+tbody tr.tags-row:hover {
+    background-color: #e9ecef;
 }
 
 td {
@@ -101,4 +128,61 @@ td.type-cell .badge {
 
 .icon-btn:hover {
     opacity: 1;
+}
+
+/* Tags cell styling */
+tr.tags-row td.tags-cell {
+    padding: 0.5rem 0.75rem;
+    background-color: inherit;
+    font-size: 0.85rem;
+}
+
+.tags-label {
+    display: inline-block;
+    font-weight: 600;
+    color: #6c757d;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tag-pair {
+    display: inline-block;
+    margin: 0.2rem 0.3rem 0.2rem 0;
+    white-space: nowrap;
+}
+
+.tag-pair .badge {
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+.tag-pair .badge:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    font-family: 'Courier New', Consolas, monospace;
+    font-weight: 600;
+}
+
+.tag-pair .badge:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Name tags styling */
+.tag-pair .badge.bg-secondary {
+    opacity: 0.8;
+}
+
+/* Highlighted filter tags */
+.filter-tag {
+    font-weight: 700 !important;
+    box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.3);
+}
+
+.filter-tag-value {
+    font-weight: 600 !important;
+    box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.3);
 }
